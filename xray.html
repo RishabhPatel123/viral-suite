@@ -761,6 +761,23 @@
             <span class="text-slate-400">Total Summed Entropy</span>
             <span id="card-total-entropy-label" class="text-cyan-400 font-bold">-- bits</span>
           </div>
+
+          <!-- Contextual Next Tool Recommendation -->
+          <div class="mt-4 p-3 rounded-xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/30 flex items-center justify-between gap-3 shadow-lg">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                <i data-lucide="shield-alert" class="w-4 h-4"></i>
+              </div>
+              <div class="text-left font-sans">
+                <div class="text-[10px] uppercase tracking-wider font-bold text-emerald-400 font-mono">CHECK CREDENTIAL LEAKS</div>
+                <div class="text-xs font-semibold text-white">Was I Hit? Breach Checker</div>
+                <div class="text-[11px] text-slate-400">Scan 178 supply-chain breaches & token skimmers</div>
+              </div>
+            </div>
+            <a href="./index.html" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold font-sans transition-all shrink-0 flex items-center gap-1 shadow-md shadow-emerald-500/20 active:scale-95">
+              Check <span class="text-sm">&rarr;</span>
+            </a>
+          </div>
         </article>
 
       </div>
@@ -775,32 +792,105 @@
   </main>
 
   <!-- SHARED FLOATING GLASS DOCK (All 5 Tools) -->
-  <nav id="viral-dock" aria-label="Main Navigation" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-1 p-2 rounded-2xl">
-    <a href="/index.html" class="flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200 text-xs font-medium" title="Breach Matrix">
-      <i data-lucide="shield-alert" class="w-4 h-4"></i>
+  <nav id="viral-dock" aria-label="Main Navigation" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-1 p-2 rounded-full bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl max-w-[95vw] overflow-x-auto">
+    <!-- Quick Switcher Command Palette Trigger -->
+    <button 
+      id="cmd-k-trigger" 
+      class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-mono transition-all mr-1 active:scale-95" 
+      title="Press Ctrl+K or Cmd+K to search all 5 tools"
+    >
+      <i data-lucide="command" class="w-3.5 h-3.5 text-cyan-400"></i>
+      <span class="text-[11px] font-semibold hidden sm:inline">⌘K</span>
+    </button>
+
+    <!-- Tool 1: Breach -->
+    <a href="./index.html" data-tool="breach" class="dock-item relative group flex items-center space-x-2 px-3 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-xs font-medium" title="Breach Matrix">
+      <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-400"></i>
       <span class="hidden md:inline">Breach</span>
+      <!-- Hover Tooltip Preview Card -->
+      <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 rounded-xl bg-slate-950/95 border border-emerald-500/40 shadow-2xl backdrop-blur-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 z-50 hidden sm:block text-left font-sans">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-emerald-400"></i> Was I Hit?
+          </span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">Security</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-tight">178-Website supply-chain breach & exploit checker.</p>
+        <div class="mt-2 text-[10px] text-emerald-400 font-semibold flex items-center gap-1">Open tool &rarr;</div>
+      </div>
     </a>
-    <a href="/slop.html" class="flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200 text-xs font-medium" title="Slop Meter">
-      <i data-lucide="bot" class="w-4 h-4"></i>
+
+    <!-- Tool 2: Slop -->
+    <a href="./slop.html" data-tool="slop" class="dock-item relative group flex items-center space-x-2 px-3 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-xs font-medium" title="Slop Meter">
+      <i data-lucide="bot" class="w-4 h-4 text-purple-400"></i>
       <span class="hidden md:inline">Slop</span>
+      <!-- Hover Tooltip Preview Card -->
+      <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 rounded-xl bg-slate-950/95 border border-purple-500/40 shadow-2xl backdrop-blur-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 z-50 hidden sm:block text-left font-sans">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="bot" class="w-3.5 h-3.5 text-purple-400"></i> AI Slop Game
+          </span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">Game</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-tight">60-second daily Turing challenge to spot AI slop vs human text.</p>
+        <div class="mt-2 text-[10px] text-purple-400 font-semibold flex items-center gap-1">Open tool &rarr;</div>
+      </div>
     </a>
-    <a href="/smash.html" class="flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200 text-xs font-medium" title="Rage Room">
-      <i data-lucide="hammer" class="w-4 h-4"></i>
+
+    <!-- Tool 3: Smash -->
+    <a href="./smash.html" data-tool="smash" class="dock-item relative group flex items-center space-x-2 px-3 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-xs font-medium" title="Rage Room">
+      <i data-lucide="hammer" class="w-4 h-4 text-rose-400"></i>
       <span class="hidden md:inline">Smash</span>
+      <!-- Hover Tooltip Preview Card -->
+      <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 rounded-xl bg-slate-950/95 border border-rose-500/40 shadow-2xl backdrop-blur-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 z-50 hidden sm:block text-left font-sans">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="hammer" class="w-3.5 h-3.5 text-rose-400"></i> SmashMyStress
+          </span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono">Physics</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-tight">60fps physics destruction rage room + 0.05s Excel Boss Panic.</p>
+        <div class="mt-2 text-[10px] text-rose-400 font-semibold flex items-center gap-1">Open tool &rarr;</div>
+      </div>
     </a>
-    <a href="/xray.html" aria-current="page" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-semibold shadow-lg shadow-cyan-950" title="Hardware X-Ray">
+
+    <!-- Tool 4: X-Ray (Active) -->
+    <a href="./xray.html" data-tool="xray" aria-current="page" class="dock-item relative group flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-semibold shadow-lg shadow-cyan-950 transition-all" title="Hardware X-Ray">
       <i data-lucide="scan" class="w-4 h-4 text-cyan-400"></i>
       <span class="hidden md:inline">X-Ray</span>
+      <!-- Hover Tooltip Preview Card -->
+      <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 rounded-xl bg-slate-950/95 border border-cyan-500/40 shadow-2xl backdrop-blur-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 z-50 hidden sm:block text-left font-sans">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="scan" class="w-3.5 h-3.5 text-cyan-400"></i> BrowserXRay
+          </span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono">Current</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-tight">Live unmasked WebGL GPU, monitor Hz & canvas fingerprint probe.</p>
+      </div>
     </a>
-    <a href="/receipt.html" class="flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200 text-xs font-medium" title="Plot Twist Receipt">
-      <i data-lucide="receipt" class="w-4 h-4"></i>
+
+    <!-- Tool 5: Receipt -->
+    <a href="./receipt.html" data-tool="receipt" class="dock-item relative group flex items-center space-x-2 px-3 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-xs font-medium" title="Plot Twist Receipt">
+      <i data-lucide="receipt" class="w-4 h-4 text-amber-400"></i>
       <span class="hidden md:inline">Receipt</span>
+      <!-- Hover Tooltip Preview Card -->
+      <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 rounded-xl bg-slate-950/95 border border-amber-500/40 shadow-2xl backdrop-blur-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 z-50 hidden sm:block text-left font-sans">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="receipt" class="w-3.5 h-3.5 text-amber-400"></i> PlotTwistReceipt
+          </span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">Studio</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-tight">2026 Expectation vs Reality High-DPI thermal receipt maker.</p>
+        <div class="mt-2 text-[10px] text-amber-400 font-semibold flex items-center gap-1">Open tool &rarr;</div>
+      </div>
     </a>
 
     <div class="h-5 w-px bg-slate-800 mx-1"></div>
 
     <!-- Synchronized Global Mute Button -->
-    <button id="mute-toggle-btn" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200" title="Toggle Micro-Haptic Audio">
+    <button id="mute-toggle-btn" class="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all" title="Toggle Micro-Haptic Audio">
       <i id="mute-icon" data-lucide="volume-2" class="w-4 h-4"></i>
     </button>
   </nav>
@@ -1635,6 +1725,36 @@
 
         if (rarityBadge) rarityBadge.textContent = rarityTier;
         if (cardRarityDesc) cardRarityDesc.textContent = rarityTier;
+
+        // Query Serverless Edge Entropy & VPN/Proxy Verification Endpoint
+        try {
+          fetch('/api/entropy-eval', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              canvasHash: document.getElementById('canvas-hash')?.textContent || 'none',
+              audioHash: document.getElementById('audio-hash')?.textContent || 'none',
+              webglRenderer: document.getElementById('gpu-renderer-val')?.textContent || '',
+              clientTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+              screenRes: `${window.screen.width}x${window.screen.height}`,
+              coreCount: navigator.hardwareConcurrency || 4
+            })
+          }).then(res => res.json()).then(data => {
+            if (data && data.success) {
+              if (rarityBadge) rarityBadge.textContent = `${data.uniquenessRatio} (Verified Population Rarity)`;
+              if (cardRarityDesc) cardRarityDesc.textContent = `${data.uniquenessRatio} — Uniqueness: ${data.uniquenessPercentage}`;
+              if (data.vpnOrProxySuspected) {
+                const tzCons = document.getElementById('tz-consistency-val');
+                if (tzCons) {
+                  tzCons.textContent = "VPN/Proxy Masking Detected";
+                  tzCons.className = "text-amber-400 font-semibold";
+                }
+              }
+            }
+          }).catch(() => {});
+        } catch (e) {
+          // Offline fallback
+        }
       }
 
       generateRedactedShareCard() {
@@ -1725,6 +1845,346 @@ Scan your browser live: https://viral-suite.vercel.app/xray`;
     window.EnvironmentBehavioralProbe = EnvironmentBehavioralProbe;
     window.XRayScannerOrchestrator = XRayScannerOrchestrator;
 
+    /* =========================================================================
+     * CLASS: ViralSuiteNavigationController (Cmd+K Palette & Cross-Tool Explorer)
+     * ========================================================================= */
+    class ViralSuiteNavigationController {
+      #tools = [
+        {
+          id: 'breach',
+          name: 'Was I Hit?',
+          tagline: '178-Website Supply-Chain Breach Checker',
+          path: './index.html',
+          icon: 'shield-alert',
+          category: 'Security Intelligence',
+          badge: 'Breach Matrix',
+          colorHex: '#10b981',
+          desc: 'Audit 178 compromised third-party vendor scripts & live OS vulnerabilities.'
+        },
+        {
+          id: 'slop',
+          name: 'Human or AI Slop?',
+          tagline: '60-Second Daily Turing Challenge',
+          path: './slop.html',
+          icon: 'bot',
+          category: 'Turing Game',
+          badge: 'Daily Game',
+          colorHex: '#a855f7',
+          desc: 'Can you spot synthetic AI slop vs genuine human chaos in 60 seconds?'
+        },
+        {
+          id: 'smash',
+          name: 'SmashMyStress',
+          tagline: '60fps Physics Rage Room & Boss Panic',
+          path: './smash.html',
+          icon: 'hammer',
+          category: 'Interactive Physics',
+          badge: 'Stress Relief',
+          colorHex: '#f43f5e',
+          desc: 'Obliterate merge conflicts & Friday 4:55 PM calls with 4 weapons + Excel disguise.'
+        },
+        {
+          id: 'xray',
+          name: 'BrowserXRay',
+          tagline: 'Live Hardware & Fingerprint Leak Scanner',
+          path: './xray.html',
+          icon: 'scan',
+          category: 'Biometric Telemetry',
+          badge: 'Privacy Audit',
+          colorHex: '#06b6d4',
+          desc: 'Real-time GPU unmasking, 45-frame refresh rate sampler & canvas hashes.'
+        },
+        {
+          id: 'receipt',
+          name: 'PlotTwistReceipt',
+          tagline: '2026 Expectation vs Reality Receipt Maker',
+          path: './receipt.html',
+          icon: 'receipt',
+          category: 'Satirical Studio',
+          badge: 'Receipt Studio',
+          colorHex: '#f59e0b',
+          desc: 'Generate High-DPI thermal receipts of your daily chaos & delusion discounts.'
+        }
+      ];
+
+      #currentToolId = '';
+      #modalEl = null;
+      #inputEl = null;
+      #listEl = null;
+      #selectedIndex = 0;
+      #filteredTools = [];
+      #isOpen = false;
+      #audioCtx = null;
+
+      constructor(currentToolId = '') {
+        this.#currentToolId = currentToolId;
+        this.#filteredTools = [...this.#tools];
+        this.#initAudio();
+        this.#mountPaletteDOM();
+        this.#bindGlobalShortcuts();
+        this.#enhanceDockTooltips();
+      }
+
+      #initAudio() {
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.#audioCtx = new AudioCtx();
+        } catch (e) {}
+      }
+
+      #playTick() {
+        if (!this.#audioCtx) return;
+        try {
+          if (this.#audioCtx.state === 'suspended') this.#audioCtx.resume();
+          const osc = this.#audioCtx.createOscillator();
+          const gain = this.#audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, this.#audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.02, this.#audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.#audioCtx.currentTime + 0.04);
+          osc.connect(gain);
+          gain.connect(this.#audioCtx.destination);
+          osc.start();
+          osc.stop(this.#audioCtx.currentTime + 0.04);
+        } catch (e) {}
+      }
+
+      #playChime() {
+        if (!this.#audioCtx) return;
+        try {
+          if (this.#audioCtx.state === 'suspended') this.#audioCtx.resume();
+          const now = this.#audioCtx.currentTime;
+          [523.25, 659.25, 783.99].forEach((freq, idx) => {
+            const osc = this.#audioCtx.createOscillator();
+            const gain = this.#audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+            gain.gain.setValueAtTime(0.03, now + idx * 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 0.15);
+            osc.connect(gain);
+            gain.connect(this.#audioCtx.destination);
+            osc.start(now + idx * 0.04);
+            osc.stop(now + idx * 0.04 + 0.15);
+          });
+        } catch (e) {}
+      }
+
+      #mountPaletteDOM() {
+        if (document.getElementById('cmd-k-palette')) return;
+
+        const paletteHtml = `
+          <div id="cmd-k-palette" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-md hidden items-start justify-center pt-16 sm:pt-24 px-4 transition-all duration-200">
+            <div id="cmd-k-container" class="w-full max-w-xl rounded-2xl bg-slate-950/95 border border-white/15 shadow-[0_25px_70px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col font-sans transform scale-95 opacity-0 transition-all duration-200">
+              <div class="flex items-center gap-3 px-4 py-3.5 border-b border-white/10 bg-white/[0.02]">
+                <i data-lucide="search" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                <input id="cmd-k-search" type="text" placeholder="Search 5 viral tools... (or use ↑/↓ and Enter)" class="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none" autocomplete="off" spellcheck="false" />
+                <button id="cmd-k-close" class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-slate-400 transition">ESC</button>
+              </div>
+              <div id="cmd-k-list" class="max-h-[380px] overflow-y-auto p-2 space-y-1.5 focus:outline-none" tabindex="0">
+              </div>
+              <div class="px-4 py-2.5 bg-white/[0.02] border-t border-white/10 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                <span class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-sans">↑</span>
+                  <span class="px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-sans">↓</span> to navigate
+                </span>
+                <span class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-sans">↵</span> to open
+                </span>
+                <span class="text-cyan-400 font-semibold">5 Standalone Apps</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', paletteHtml);
+        this.#modalEl = document.getElementById('cmd-k-palette');
+        this.#inputEl = document.getElementById('cmd-k-search');
+        this.#listEl = document.getElementById('cmd-k-list');
+
+        this.#inputEl.addEventListener('input', (e) => {
+          this.#filterTools(e.target.value);
+        });
+
+        this.#modalEl.addEventListener('click', (e) => {
+          if (e.target === this.#modalEl) this.close();
+        });
+
+        document.getElementById('cmd-k-close')?.addEventListener('click', () => this.close());
+        this.#renderList();
+      }
+
+      #filterTools(query) {
+        const q = query.trim().toLowerCase();
+        if (!q) {
+          this.#filteredTools = [...this.#tools];
+        } else {
+          this.#filteredTools = this.#tools.filter(t => 
+            t.name.toLowerCase().includes(q) ||
+            t.tagline.toLowerCase().includes(q) ||
+            t.desc.toLowerCase().includes(q) ||
+            t.category.toLowerCase().includes(q) ||
+            t.badge.toLowerCase().includes(q)
+          );
+        }
+        this.#selectedIndex = 0;
+        this.#renderList();
+      }
+
+      #renderList() {
+        if (!this.#listEl) return;
+
+        if (this.#filteredTools.length === 0) {
+          this.#listEl.innerHTML = `
+            <div class="p-8 text-center text-slate-500 text-xs font-mono">
+              No matching viral tools found.
+            </div>
+          `;
+          return;
+        }
+
+        this.#listEl.innerHTML = this.#filteredTools.map((tool, idx) => {
+          const isSelected = idx === this.#selectedIndex;
+          const isCurrent = tool.id === this.#currentToolId;
+          return `
+            <div 
+              data-tool-idx="${idx}"
+              class="cmd-k-item group p-3 rounded-xl transition-all cursor-pointer flex items-center justify-between gap-3 ${isSelected ? 'bg-white/10 border border-white/15' : 'hover:bg-white/5 border border-transparent'}"
+            >
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background: ${tool.colorHex}22; color: ${tool.colorHex}; border: 1px solid ${tool.colorHex}44;">
+                  <i data-lucide="${tool.icon}" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">${tool.name}</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full" style="background: ${tool.colorHex}20; color: ${tool.colorHex};">${tool.badge}</span>
+                    ${isCurrent ? '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">CURRENT</span>' : ''}
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5 leading-snug">${tool.desc}</p>
+                </div>
+              </div>
+              <div class="shrink-0 flex items-center gap-2">
+                <span class="text-[11px] font-mono text-slate-500 group-hover:text-white transition-colors">Launch &rarr;</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        this.#listEl.querySelectorAll('.cmd-k-item').forEach(el => {
+          el.addEventListener('click', () => {
+            const idx = parseInt(el.getAttribute('data-tool-idx'), 10);
+            this.#selectTool(idx);
+          });
+          el.addEventListener('mouseenter', () => {
+            this.#selectedIndex = parseInt(el.getAttribute('data-tool-idx'), 10);
+            this.#playTick();
+            this.#updateSelectionVisuals();
+          });
+        });
+
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      }
+
+      #updateSelectionVisuals() {
+        const items = this.#listEl.querySelectorAll('.cmd-k-item');
+        items.forEach((el, idx) => {
+          if (idx === this.#selectedIndex) {
+            el.classList.add('bg-white/10', 'border-white/15');
+            el.classList.remove('hover:bg-white/5', 'border-transparent');
+            el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          } else {
+            el.classList.remove('bg-white/10', 'border-white/15');
+            el.classList.add('hover:bg-white/5', 'border-transparent');
+          }
+        });
+      }
+
+      #selectTool(index) {
+        const tool = this.#filteredTools[index];
+        if (!tool) return;
+        this.#playChime();
+        window.location.href = tool.path;
+      }
+
+      open() {
+        if (this.#isOpen) return;
+        this.#isOpen = true;
+        this.#modalEl.classList.remove('hidden');
+        this.#modalEl.classList.add('flex');
+        const container = document.getElementById('cmd-k-container');
+        setTimeout(() => {
+          container.classList.remove('scale-95', 'opacity-0');
+          container.classList.add('scale-100', 'opacity-100');
+          this.#inputEl.focus();
+        }, 10);
+        this.#playTick();
+      }
+
+      close() {
+        if (!this.#isOpen) return;
+        const container = document.getElementById('cmd-k-container');
+        container.classList.remove('scale-100', 'opacity-100');
+        container.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          this.#modalEl.classList.add('hidden');
+          this.#modalEl.classList.remove('flex');
+          this.#isOpen = false;
+          this.#inputEl.value = '';
+          this.#filteredTools = [...this.#tools];
+          this.#selectedIndex = 0;
+          this.#renderList();
+        }, 150);
+      }
+
+      toggle() {
+        if (this.#isOpen) this.close();
+        else this.open();
+      }
+
+      #bindGlobalShortcuts() {
+        window.addEventListener('keydown', (e) => {
+          if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+            e.preventDefault();
+            this.toggle();
+            return;
+          }
+
+          if (!this.#isOpen) return;
+
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            this.close();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            this.#selectedIndex = (this.#selectedIndex + 1) % this.#filteredTools.length;
+            this.#playTick();
+            this.#updateSelectionVisuals();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.#selectedIndex = (this.#selectedIndex - 1 + this.#filteredTools.length) % this.#filteredTools.length;
+            this.#playTick();
+            this.#updateSelectionVisuals();
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            this.#selectTool(this.#selectedIndex);
+          }
+        });
+
+        document.querySelectorAll('#cmd-k-trigger, [data-open-cmd-k]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.open();
+          });
+        });
+      }
+
+      #enhanceDockTooltips() {
+        document.querySelectorAll('#viral-dock a[data-tool], #viral-dock a[href]').forEach(link => {
+          link.addEventListener('mouseenter', () => this.#playTick());
+        });
+      }
+    }
+
     // =========================================================================
     // 9. INITIALIZATION & DOM BINDINGS
     // =========================================================================
@@ -1747,7 +2207,10 @@ Scan your browser live: https://viral-suite.vercel.app/xray`;
         window.lucide.createIcons();
       }
 
-      // 3. Setup Bento Card 3D Spotlight Tilt
+      // 3. Initialize Navigation Controller
+      window.navController = new ViralSuiteNavigationController('xray');
+
+      // 4. Setup Bento Card 3D Spotlight Tilt
       const cards = document.querySelectorAll('.bento-card');
       cards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
