@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlotTwistReceipt.com — 2026 Expectation vs. Reality Receipt Studio</title>
+  <meta name="description" content="Turn your overambitious 2026 plans into itemized satirical thermal receipts with chaos taxes, delusion discounts, and survival grades.">
+  <meta name="keywords" content="receipt generator, plot twist receipt, expectation vs reality, satirical receipt, 2026 planner, viral receipt">
+  <meta name="theme-color" content="#0a0c14">
+
+  <!-- OpenGraph Social Cards -->
+  <meta property="og:title" content="PlotTwistReceipt.com — 2026 Expectation vs. Reality Receipt Studio">
+  <meta property="og:description" content="Turn your overambitious 2026 plans into itemized satirical thermal receipts with chaos taxes, delusion discounts, and survival grades.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://viral-suite.vercel.app/receipt">
+
+  <!-- Twitter Social Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PlotTwistReceipt.com — 2026 Expectation vs. Reality Receipt Studio">
+  <meta name="twitter:description" content="Turn your overambitious 2026 plans into itemized satirical thermal receipts with chaos taxes, delusion discounts, and survival grades.">
+
+  <!-- Google Fonts Preload -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- External CDN Libraries (Zero Build) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"Space Mono"', '"JetBrains Mono"', 'monospace'],
+            typewriter: ['"Courier Prime"', '"Courier New"', 'monospace']
+          },
+          colors: {
+            cyber: {
+              bg: '#0a0c14',
+              surface: '#111420',
+              card: '#161a29',
+              border: '#23293f',
+              cyan: '#06b6d4',
+              neon: '#22d3ee',
+              amber: '#f59e0b',
+              rose: '#f43f5e',
+              emerald: '#10b981'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Base Glassmorphism & Cyber Theme */
+    body {
+      background-color: #0a0c14;
+      color: #f1f5f9;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.09) 0%, transparent 55%),
+        radial-gradient(circle at 90% 40%, rgba(168, 85, 247, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 10% 80%, rgba(245, 158, 11, 0.04) 0%, transparent 45%);
+      background-attachment: fixed;
+    }
+
+    /* Radial Spotlight Mouse-Tracking Card */
+    .spotlight-card {
+      position: relative;
+      background: rgba(22, 26, 41, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      overflow: hidden;
+    }
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(6, 182, 212, 0.12), transparent 40%);
+      pointer-events: none;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .spotlight-card:hover::before {
+      opacity: 1;
+    }
+    .spotlight-card:hover {
+      border-color: rgba(6, 182, 212, 0.35);
+      box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.15);
+    }
+
+    /* Thermal Printer Physical Slot Bezel */
+    .printer-bezel {
+      background: linear-gradient(180deg, #181d2c 0%, #0d101a 100%);
+      border: 1px solid #273048;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .printer-slit {
+      background: #040609;
+      box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.95), 0 1px 0 rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Receipt Canvas Visual Styling */
+    #receipt-canvas {
+      filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.55));
+      transform-origin: top center;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0c14;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative pb-32">
+
+  <!-- Top Announcement Bar & Navigation Header -->
+  <header class="w-full border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 text-white font-bold">
+          <i data-lucide="receipt" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-base sm:text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
+              PlotTwistReceipt<span class="text-cyan-400">.com</span>
+            </span>
+            <span class="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 uppercase">
+              2026 Studio
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Expectation vs. Reality Satirical Receipt Studio</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Audio Mute Toggle Button -->
+        <button id="mute-toggle-btn" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all flex items-center gap-2 text-xs font-mono group" title="Toggle Synthesized Audio">
+          <i id="mute-icon" data-lucide="volume-2" class="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform"></i>
+          <span id="mute-label" class="hidden md:inline">AUDIO ON</span>
+        </button>
+
+        <!-- Quick Share Button -->
+        <button id="header-share-btn" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all flex items-center gap-1.5 text-xs font-medium" title="Share Receipt">
+          <i data-lucide="share-2" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Share</span>
+        </button>
+
+        <!-- Quick Export HD PNG Button -->
+        <button id="header-export-btn" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-xs tracking-wide shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all flex items-center gap-2">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Export HD</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-6 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/50 text-cyan-300 text-xs font-medium mb-3">
+      <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+      <span>Thermal Printer Online • Zero Build Step • Pure Web Audio</span>
+    </div>
+    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-2">
+      2026 Expectation vs. Reality <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">Receipt Studio</span>
+    </h1>
+    <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-400">
+      Turn your overambitious 2026 goals into itemized satirical thermal receipts. 
+      Complete with procedural paper grain, jagged tear edges, chai surcharges, and pure spite tips.
+    </p>
+  </section>
+
+  <!-- Main Application Workspace -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- LEFT COLUMN: Control Studio, Presets, Themes & Interactive Editor (7 Cols) -->
+    <div class="lg:col-span-7 space-y-6">
+
+      <!-- Card 1: 5 Viral Reality Presets -->
+      <div class="spotlight-card p-5 sm:p-6" id="presets-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200">1. Select 2026 Reality Scenario</h2>
+          </div>
+          <span class="text-xs font-mono text-cyan-400/80">5 Relatable Presets</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="presets-container">
+          <!-- Preset 1: Developer Sprint -->
+          <button data-preset="sprint" class="preset-btn text-left p-3 rounded-xl border border-cyan-500/40 bg-cyan-950/20 hover:bg-cyan-900/30 transition-all group relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-sm text-white group-hover:text-cyan-300 flex items-center gap-1.5">
+                <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i> Developer Sprint
+              </span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-900/60 text-cyan-300">Monolith</span>
+            </div>
+            <p class="text-xs text-slate-400 line-clamp-2">Clean refactor planned → 84 merge conflicts, Saturday prod outage, coffee on M3 Max.</p>
+          </button>
+
+          <!-- Preset 2: Exam Week -->
+          <button data-preset="exam" class="preset-btn text-left p-3 rounded-xl border border-slate-700/60 bg-slate-900/40 hover:bg-slate-800/50 hover:border-slate-600 transition-all group relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-sm text-white group-hover:text-amber-300 flex items-center gap-1.5">
+                <i data-lucide="graduation-cap" class="w-4 h-4 text-amber-400"></i> Exam Week
+              </span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-300">Espresso</span>
+            </div>
+            <p class="text-xs text-slate-400 line-clamp-2">Study 8 hours planned → 6 hours of rug cleaning videos, minimum pass calculated 42x.</p>
+          </button>
+
+          <!-- Preset 3: Monthly Budget -->
+          <button data-preset="budget" class="preset-btn text-left p-3 rounded-xl border border-slate-700/60 bg-slate-900/40 hover:bg-slate-800/50 hover:border-slate-600 transition-all group relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-sm text-white group-hover:text-emerald-300 flex items-center gap-1.5">
+                <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i> Monthly Budget
+              </span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-900/40 text-emerald-300">UberEats</span>
+            </div>
+            <p class="text-xs text-slate-400 line-clamp-2">Meal prep & 40% ETF invest planned → 2 AM gourmet delivery, artisan keyboard keycap.</p>
+          </button>
+
+          <!-- Preset 4: Gym & Sleep -->
+          <button data-preset="gym" class="preset-btn text-left p-3 rounded-xl border border-slate-700/60 bg-slate-900/40 hover:bg-slate-800/50 hover:border-slate-600 transition-all group relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-sm text-white group-hover:text-rose-300 flex items-center gap-1.5">
+                <i data-lucide="dumbbell" class="w-4 h-4 text-rose-400"></i> Gym & Sleep
+              </span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-900/40 text-rose-300">Snooze 11x</span>
+            </div>
+            <p class="text-xs text-slate-400 line-clamp-2">5:30 AM alarm & 315 lb lift planned → Snoozed 11x, laid on yoga mat scrolling TikTok.</p>
+          </button>
+
+          <!-- Preset 5: Productivity Reset -->
+          <button data-preset="reset" class="preset-btn sm:col-span-2 text-left p-3 rounded-xl border border-slate-700/60 bg-slate-900/40 hover:bg-slate-800/50 hover:border-slate-600 transition-all group relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-sm text-white group-hover:text-teal-300 flex items-center gap-1.5">
+                <i data-lucide="layout-grid" class="w-4 h-4 text-teal-400"></i> Productivity Reset
+              </span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-900/40 text-teal-300">Notion Icons</span>
+            </div>
+            <p class="text-xs text-slate-400">Organize life in Notion planned → Spent 5 hours customizing icons, checked Slack every 75s.</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 2: 3 Polymorphic Visual Themes -->
+      <div class="spotlight-card p-5 sm:p-6" id="themes-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <i data-lucide="palette" class="w-4 h-4 text-teal-400"></i>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200">2. Thermal Receipt Theme</h2>
+          </div>
+          <span class="text-xs font-mono text-slate-400">3 Polymorphic Renderers</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="themes-container">
+          <!-- Theme 1: Supermarket Thermal -->
+          <button data-theme="thermal" class="theme-btn p-3.5 rounded-xl border border-cyan-500/50 bg-cyan-950/20 text-left transition-all hover:border-cyan-400 group">
+            <div class="w-full h-8 rounded bg-[#fbfbfa] text-[#161616] font-mono text-[9px] flex items-center justify-center font-bold mb-2 shadow-inner">
+              RECEIPT #2026
+            </div>
+            <div class="font-bold text-xs text-white group-hover:text-cyan-300">Supermarket Thermal</div>
+            <p class="text-[11px] text-slate-400">Off-white paper, charcoal ink, ASCII store logo & tabular layout.</p>
+          </button>
+
+          <!-- Theme 2: Aviation Boarding Pass -->
+          <button data-theme="boarding" class="theme-btn p-3.5 rounded-xl border border-slate-700/60 bg-slate-900/40 text-left transition-all hover:border-slate-500 group">
+            <div class="w-full h-8 rounded bg-[#f4eedb] text-[#0e1e38] font-mono text-[9px] flex items-center justify-center font-bold mb-2 shadow-inner border-r-2 border-dashed border-[#0e1e38]/30">
+              BOARDING PASS ✈ 1A
+            </div>
+            <div class="font-bold text-xs text-white group-hover:text-amber-300">Aviation Boarding Pass</div>
+            <p class="text-[11px] text-slate-400">Cream cardstock, navy ink, flight origin/destination & detachable slip.</p>
+          </button>
+
+          <!-- Theme 3: Midnight Cafe Ticket -->
+          <button data-theme="cafe" class="theme-btn p-3.5 rounded-xl border border-slate-700/60 bg-slate-900/40 text-left transition-all hover:border-slate-500 group">
+            <div class="w-full h-8 rounded bg-[#22242a] text-[#ffc86b] font-typewriter text-[9px] flex items-center justify-center font-bold mb-2 shadow-inner border border-amber-500/20">
+              ★ PAID IN TEARS ★
+            </div>
+            <div class="font-bold text-xs text-white group-hover:text-rose-300">Midnight Cafe Slip</div>
+            <p class="text-[11px] text-slate-400">Late-night slate paper, distressed rubber stamps & typewriter ink.</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 3: Interactive Line Item Editor -->
+      <div class="spotlight-card p-5 sm:p-6" id="editor-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <i data-lucide="edit-3" class="w-4 h-4 text-amber-400"></i>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200">3. Interactive Itemized Breakdown</h2>
+          </div>
+          <span class="text-xs font-mono text-amber-400/80">Live Dynamic Model</span>
+        </div>
+
+        <!-- Add New Item Form -->
+        <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800 mb-4 space-y-3">
+          <div class="text-xs font-semibold text-slate-300">Add Custom Item to Receipt:</div>
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+            <div class="sm:col-span-6">
+              <label for="item-name-input" class="sr-only">Item Description</label>
+              <input type="text" id="item-name-input" placeholder="Item description (e.g. 3 AM Cold Pizza)" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+            </div>
+            <div class="sm:col-span-2">
+              <label for="item-qty-input" class="sr-only">Quantity</label>
+              <input type="number" id="item-qty-input" placeholder="Qty" value="1" min="1" max="999" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 text-center">
+            </div>
+            <div class="sm:col-span-2">
+              <label for="item-price-input" class="sr-only">Price</label>
+              <input type="number" id="item-price-input" placeholder="Price ($)" value="45" min="0" step="0.5" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 text-center">
+            </div>
+            <div class="sm:col-span-2">
+              <button id="item-type-toggle-btn" class="w-full py-2 px-2 rounded-lg bg-rose-950/50 border border-rose-800 text-[11px] font-bold text-rose-300 hover:bg-rose-900/60 transition-all text-center">
+                Plot Twist
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button id="add-item-btn" class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs tracking-wide shadow-sm flex items-center gap-1.5 transition-all">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Line Item
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Items Container -->
+        <div class="space-y-2 max-h-72 overflow-y-auto pr-1" id="items-list-container">
+          <!-- Populated dynamically by UIController -->
+        </div>
+
+        <!-- Chaos Taxes & Delusion Discounts Calculator -->
+        <div class="mt-5 p-4 rounded-xl bg-slate-950/80 border border-slate-800 font-mono text-xs space-y-1.5">
+          <div class="flex justify-between text-slate-400">
+            <span>Emotional Subtotal:</span>
+            <span id="tax-subtotal">$0.00</span>
+          </div>
+          <div class="flex justify-between text-amber-400">
+            <span>+ Chai / Caffeine Surcharge:</span>
+            <span>+$14.50</span>
+          </div>
+          <div class="flex justify-between text-rose-400">
+            <span>+ Overthinking Tax (18%):</span>
+            <span id="tax-overthinking">+$0.00</span>
+          </div>
+          <div class="flex justify-between text-emerald-400">
+            <span>- Delusion Discount (Max $40):</span>
+            <span id="tax-delusion">-$40.00</span>
+          </div>
+          <div class="flex justify-between text-amber-400">
+            <span>+ Impulse Surcharge:</span>
+            <span>+$24.00</span>
+          </div>
+          <div class="flex justify-between text-teal-400">
+            <span>+ Pure Spite Gratuity (15%):</span>
+            <span id="tax-spite">+$0.00</span>
+          </div>
+          <div class="border-t border-slate-800 pt-2 flex justify-between text-sm font-bold text-white">
+            <span>TOTAL EMOTIONAL DAMAGE:</span>
+            <span id="tax-final-total" class="text-cyan-400 text-base">$0.00</span>
+          </div>
+          <div class="pt-2 text-center text-xs font-sans font-bold text-rose-400 bg-rose-950/30 border border-rose-900/40 rounded-lg py-1.5" id="tax-survival-grade">
+            GRADE: D- (SURVIVED ON PURE SPITE)
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Thermal Printer Hardware Bezel & High-DPI Canvas Display (5 Cols) -->
+    <div class="lg:col-span-5 sticky top-24 space-y-4">
+
+      <!-- Thermal Printer Hardware Case -->
+      <div class="printer-bezel rounded-2xl p-4 sm:p-5 relative shadow-2xl">
+        
+        <!-- Hardware Top Panel & Slit -->
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800/80 text-xs font-mono">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
+            <span class="text-slate-300 font-bold tracking-wider">PRINTER #PT-2026</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800 text-[10px]">
+              DPI: HIGH RETINA
+            </span>
+            <button id="reprint-btn" class="px-2.5 py-1 rounded bg-cyan-950 hover:bg-cyan-900 border border-cyan-700/60 text-cyan-300 text-[11px] font-sans font-medium flex items-center gap-1 transition-all">
+              <i data-lucide="refresh-cw" class="w-3 h-3"></i> Feed
+            </button>
+          </div>
+        </div>
+
+        <!-- The Physical Dispenser Slit -->
+        <div class="printer-slit h-4 rounded-full my-3 relative overflow-hidden flex items-center justify-center">
+          <div class="w-3/4 h-[2px] bg-cyan-500/30 blur-[1px]"></div>
+        </div>
+
+        <!-- Receipt Canvas Clipping Container -->
+        <div class="overflow-hidden rounded-b-xl flex justify-center py-2 relative" id="receipt-stage">
+          <!-- High-DPI 900x1400 Canvas -->
+          <canvas id="receipt-canvas" width="900" height="1400" class="w-full max-w-[380px] sm:max-w-[420px] rounded shadow-2xl block select-none cursor-pointer" title="Click to Reprint"></canvas>
+        </div>
+
+        <!-- Direct Actions Under Receipt -->
+        <div class="mt-4 pt-3 border-t border-slate-800/80 grid grid-cols-2 gap-3">
+          <button id="canvas-download-btn" class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-1.5 shadow-lg shadow-cyan-500/20 transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i> Save HD PNG
+          </button>
+          <button id="canvas-share-btn" class="py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-1.5 transition-all">
+            <i data-lucide="share-2" class="w-4 h-4 text-cyan-400"></i> Share Card
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Quick Tips Card -->
+      <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs text-slate-400 space-y-1">
+        <div class="font-semibold text-slate-300 flex items-center gap-1.5">
+          <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400"></i> Viral Feature Highlights:
+        </div>
+        <p>• Procedural Code 128 barcode watermark with satirical fine print.</p>
+        <p>• High-DPI retina rendering scaled automatically to device pixel ratio.</p>
+        <p>• Stepper motor pulses & cutter snip synthesized via Web Audio API.</p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Cross-Tool Floating Glass Navigation Dock -->
+  <nav id="viral-dock" aria-label="Main Navigation" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-3 sm:px-4 py-2.5 rounded-full bg-slate-950/85 backdrop-blur-xl border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.7)] flex items-center gap-1.5 sm:gap-2">
+    <!-- Tool 1: Breach Checker -->
+    <a href="/index.html" class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-1.5" title="Tool #1: Was I Hit? Breach Checker">
+      <i data-lucide="shield-alert" class="w-4 h-4 text-rose-400"></i>
+      <span class="hidden md:inline">Breach</span>
+    </a>
+
+    <!-- Tool 2: AI Slop Game -->
+    <a href="/slop.html" class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-1.5" title="Tool #2: Human or AI Slop?">
+      <i data-lucide="bot" class="w-4 h-4 text-amber-400"></i>
+      <span class="hidden md:inline">Slop</span>
+    </a>
+
+    <!-- Tool 3: Rage Room & Boss Panic -->
+    <a href="/smash.html" class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-1.5" title="Tool #3: SmashMyStress.fun">
+      <i data-lucide="hammer" class="w-4 h-4 text-emerald-400"></i>
+      <span class="hidden md:inline">Smash</span>
+    </a>
+
+    <!-- Tool 4: Browser X-Ray -->
+    <a href="/xray.html" class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-1.5" title="Tool #4: BrowserXRay.live">
+      <i data-lucide="scan" class="w-4 h-4 text-purple-400"></i>
+      <span class="hidden md:inline">X-Ray</span>
+    </a>
+
+    <!-- Tool 5: Plot Twist Receipt (Active) -->
+    <a href="/receipt.html" class="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center gap-1.5" title="Tool #5: Plot Twist Receipt Studio">
+      <i data-lucide="receipt" class="w-4 h-4 text-cyan-400"></i>
+      <span>Receipt</span>
+    </a>
+  </nav>
+
+  <!-- Interactive Toast Notification Element -->
+  <div id="toast-notification" class="fixed top-20 right-6 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="px-4 py-3 rounded-xl bg-slate-900/95 border border-cyan-500/40 text-slate-100 shadow-2xl backdrop-blur-md flex items-center gap-3 text-xs font-medium">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i>
+      <span id="toast-message">Receipt copied to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- SCRIPT ARCHITECTURE: Strict ES6+ OOP Implementation -->
+  <script>
+    /* =========================================================================
+     * 1. ThermalPrinterAudioEngine (Web Audio API Procedural Synthesizer)
+     * ========================================================================= */
+    class ThermalPrinterAudioEngine {
+      #audioCtx = null;
+      #masterGain = null;
+      #isMuted = false;
+
+      constructor() {
+        const storedMute = localStorage.getItem('viral_suite_haptics_muted');
+        this.#isMuted = (storedMute === 'true');
+      }
+
+      get isMuted() {
+        return this.#isMuted;
+      }
+
+      init() {
+        if (!this.#audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            this.#audioCtx = new AudioContextClass();
+            this.#masterGain = this.#audioCtx.createGain();
+            this.#masterGain.gain.setValueAtTime(this.#isMuted ? 0 : 0.25, this.#audioCtx.currentTime);
+            this.#masterGain.connect(this.#audioCtx.destination);
+          }
+        }
+        if (this.#audioCtx && this.#audioCtx.state === 'suspended') {
+          this.#audioCtx.resume();
+        }
+      }
+
+      toggleMute() {
+        this.#isMuted = !this.#isMuted;
+        localStorage.setItem('viral_suite_haptics_muted', this.#isMuted ? 'true' : 'false');
+        if (this.#masterGain && this.#audioCtx) {
+          this.#masterGain.gain.setValueAtTime(this.#isMuted ? 0 : 0.25, this.#audioCtx.currentTime);
+        }
+        return this.#isMuted;
+      }
+
+      playButtonTick() {
+        if (this.#isMuted) return;
+        this.init();
+        if (!this.#audioCtx) return;
+
+        const osc = this.#audioCtx.createOscillator();
+        const gain = this.#audioCtx.createGain();
+        const t = this.#audioCtx.currentTime;
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1600, t);
+        osc.frequency.exponentialRampToValueAtTime(800, t + 0.015);
+
+        gain.gain.setValueAtTime(0.15, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.015);
+
+        osc.connect(gain);
+        gain.connect(this.#masterGain);
+
+        osc.start(t);
+        osc.stop(t + 0.02);
+      }
+
+      playPrinterFeed(durationMs = 800) {
+        if (this.#isMuted) return;
+        this.init();
+        if (!this.#audioCtx) return;
+
+        const pulseInterval = 45;
+        const totalPulses = Math.floor(durationMs / pulseInterval);
+
+        for (let i = 0; i < totalPulses; i++) {
+          const delay = (i * pulseInterval) / 1000;
+          const t = this.#audioCtx.currentTime + delay;
+
+          // Stepper motor pulse (140Hz square wave)
+          const osc = this.#audioCtx.createOscillator();
+          const gain = this.#audioCtx.createGain();
+
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(140 + (i % 3) * 15, t);
+
+          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+
+          osc.connect(gain);
+          gain.connect(this.#masterGain);
+
+          osc.start(t);
+          osc.stop(t + 0.03);
+        }
+
+        // Friction noise hiss layered
+        const bufferSize = Math.floor(this.#audioCtx.sampleRate * (durationMs / 1000));
+        const noiseBuffer = this.#audioCtx.createBuffer(1, bufferSize, this.#audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = (Math.random() * 2 - 1) * 0.15;
+        }
+
+        const whiteNoise = this.#audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+
+        const filter = this.#audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 2200;
+        filter.Q.value = 2.0;
+
+        const noiseGain = this.#audioCtx.createGain();
+        const startT = this.#audioCtx.currentTime;
+        noiseGain.gain.setValueAtTime(0.05, startT);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, startT + (durationMs / 1000));
+
+        whiteNoise.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(this.#masterGain);
+
+        whiteNoise.start(startT);
+        whiteNoise.stop(startT + (durationMs / 1000));
+
+        // Cutter snip at finish
+        setTimeout(() => {
+          this.playPaperTear();
+        }, durationMs - 50);
+      }
+
+      playPaperTear() {
+        if (this.#isMuted) return;
+        this.init();
+        if (!this.#audioCtx) return;
+
+        const t = this.#audioCtx.currentTime;
+        // High metallic impulse
+        const osc = this.#audioCtx.createOscillator();
+        const gain = this.#audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(3200, t);
+        osc.frequency.exponentialRampToValueAtTime(450, t + 0.12);
+
+        gain.gain.setValueAtTime(0.2, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+
+        osc.connect(gain);
+        gain.connect(this.#masterGain);
+
+        osc.start(t);
+        osc.stop(t + 0.13);
+      }
+    }
+
+
+    /* =========================================================================
+     * 2. ReceiptOrderModel (Data & Viral Preset Dictionary)
+     * ========================================================================= */
+    class ReceiptOrderModel {
+      #title;
+      #date;
+      #cashier;
+      #presetId;
+      #items = [];
+      #chaosTaxes = [];
+      #survivalRating;
+      #barcodeText;
+
+      static PRESETS = {
+        sprint: {
+          title: "DEVELOPER SPRINT RETROSPECTIVE 2026",
+          cashier: "BURNOUT_COPILOT_V2",
+          survivalRating: "GRADE: D- (SURVIVED ON PURE SPITE)",
+          barcodeText: "PLOTTWIST-DEV-SPRINT-2026",
+          items: [
+            { name: "Clean Architecture Refactor", qty: 1, price: 100.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "100% Unit Test Coverage", qty: 1, price: 80.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Deploy to Prod by 3 PM Friday", qty: 1, price: 120.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Merge Conflict in 84 Files", qty: 84, price: 5.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Production Down on Saturday 2 AM", qty: 1, price: 999.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Double Espresso Spilled on M3 Max", qty: 1, price: 3499.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Reverted to Legacy Monolith", qty: 1, price: 0.00, isPlotTwist: true, tag: "PLOT TWIST" }
+          ]
+        },
+        exam: {
+          title: "MIDTERM EXAM WEEK SURVIVAL SLIP",
+          cashier: "CHAI_AND_PANIC_CLERK",
+          survivalRating: "GRADE: C+ (CAFFEINE OVERLOAD SURVIVOR)",
+          barcodeText: "PLOTTWIST-EXAM-WEEK-2026",
+          items: [
+            { name: "Study 8 Hours Daily in Library", qty: 7, price: 10.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Review All 10 Past Exam Papers", qty: 5, price: 10.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Consistent 8hr Sleep Schedule", qty: 7, price: 20.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "6 Hours of Rug Cleaning Videos", qty: 12, price: 20.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Calculated Min Passing Grade 42x", qty: 42, price: 4.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Panic-Induced Espresso Chugging", qty: 9, price: 9.00, isPlotTwist: true, tag: "PLOT TWIST" }
+          ]
+        },
+        budget: {
+          title: "2026 MONTHLY BUDGET & ETF AUDIT",
+          cashier: "DELUSIONAL_FINANCIER",
+          survivalRating: "GRADE: F (CREDIT SCORE IN WITNESS PROTECTION)",
+          barcodeText: "PLOTTWIST-BUDGET-DELUSION-2026",
+          items: [
+            { name: "Meal Prep Healthy Sundays", qty: 4, price: 30.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Invest 40% Paycheck into S&P500", qty: 1, price: 800.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Cancel Netflix & Unused Subs", qty: 2, price: -30.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "2 AM Gourmet UberEats Feast", qty: 6, price: 64.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Artisan Mechanical Keyboard Keycap", qty: 1, price: 185.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Unused Gym Membership Auto-Charge", qty: 1, price: 89.00, isPlotTwist: true, tag: "PLOT TWIST" }
+          ]
+        },
+        gym: {
+          title: "FITNESS RESET & SLEEP PROTOCOL",
+          cashier: "DOPAMINE_BROKER_01",
+          survivalRating: "GRADE: D+ (EXCELLENT HORIZONTAL FORM)",
+          barcodeText: "PLOTTWIST-GYM-SLEEP-2026",
+          items: [
+            { name: "5:30 AM Wakeup Alarm", qty: 5, price: 10.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Hit 315 lb Clean Deadlift", qty: 1, price: 100.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Drink 1 Gallon of Water Daily", qty: 7, price: 3.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Hit Snooze Button 11 Times", qty: 11, price: 5.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Laid on Yoga Mat Scrolling TikTok", qty: 1, price: 120.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "3 Slices of 1 AM Cold Leftover Pizza", qty: 3, price: 15.00, isPlotTwist: true, tag: "PLOT TWIST" }
+          ]
+        },
+        reset: {
+          title: "LIFE REDESIGN & NOTION ZERO",
+          cashier: "PROCRASTINATION_DIRECTOR",
+          survivalRating: "GRADE: C- (PROCRASTINATED WITH HIGH EFFORT)",
+          barcodeText: "PLOTTWIST-NOTION-RESET-2026",
+          items: [
+            { name: "Organize Entire Life in Notion", qty: 1, price: 60.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "Inbox Zero Achieved and Maintained", qty: 1, price: 90.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "4-Hour Deep Work Focus Block", qty: 5, price: 50.00, isPlotTwist: false, tag: "PLANNED" },
+            { name: "5 Hours Customizing Notion Aesthetic", qty: 1, price: 250.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Checked Slack Every 75 Seconds", qty: 180, price: 2.00, isPlotTwist: true, tag: "PLOT TWIST" },
+            { name: "Deep Dive into Wikipedia Banana Wars", qty: 1, price: 150.00, isPlotTwist: true, tag: "PLOT TWIST" }
+          ]
+        }
+      };
+
+      constructor(presetId = 'sprint') {
+        this.loadPreset(presetId);
+      }
+
+      loadPreset(presetId) {
+        const config = ReceiptOrderModel.PRESETS[presetId] || ReceiptOrderModel.PRESETS.sprint;
+        this.#presetId = presetId;
+        this.#title = config.title;
+        this.#date = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+        this.#cashier = config.cashier;
+        this.#survivalRating = config.survivalRating;
+        this.#barcodeText = config.barcodeText;
+        this.#items = config.items.map(i => ({ ...i }));
+      }
+
+      get title() { return this.#title; }
+      get date() { return this.#date; }
+      get cashier() { return this.#cashier; }
+      get presetId() { return this.#presetId; }
+      get items() { return this.#items; }
+      get survivalRating() { return this.#survivalRating; }
+      get barcodeText() { return this.#barcodeText; }
+
+      addItem(name, qty, price, isPlotTwist = false, tag = "") {
+        this.#items.push({
+          name: name.trim() || "Untitled Line Item",
+          qty: Math.max(1, parseInt(qty, 10) || 1),
+          price: parseFloat(price) || 0.0,
+          isPlotTwist: Boolean(isPlotTwist),
+          tag: tag || (isPlotTwist ? "PLOT TWIST" : "PLANNED")
+        });
+      }
+
+      removeItem(index) {
+        if (index >= 0 && index < this.#items.length) {
+          this.#items.splice(index, 1);
+        }
+      }
+
+      toggleItemPlotTwist(index) {
+        if (index >= 0 && index < this.#items.length) {
+          this.#items[index].isPlotTwist = !this.#items[index].isPlotTwist;
+          this.#items[index].tag = this.#items[index].isPlotTwist ? "PLOT TWIST" : "PLANNED";
+        }
+      }
+
+      calculateSubtotal() {
+        return this.#items.reduce((sum, item) => sum + (item.qty * item.price), 0);
+      }
+
+      calculateTaxesAndDiscounts() {
+        const subtotal = this.calculateSubtotal();
+        const chaiSurcharge = 14.50;
+        const overthinkingTax = Math.round(subtotal * 0.18 * 100) / 100;
+        const delusionDiscount = Math.min(subtotal, 40.00);
+        const impulseSurcharge = 24.00;
+        const spiteTip = Math.round(subtotal * 0.15 * 100) / 100;
+
+        const finalTotal = Math.max(0, subtotal + chaiSurcharge + overthinkingTax - delusionDiscount + impulseSurcharge + spiteTip);
+
+        return {
+          subtotal,
+          chaiSurcharge,
+          overthinkingTax,
+          delusionDiscount,
+          impulseSurcharge,
+          spiteTip,
+          finalTotal
+        };
+      }
+    }
+
+
+    /* =========================================================================
+     * 3. BaseCanvasReceiptRenderer (Abstract Base High-DPI Canvas Renderer)
+     * ========================================================================= */
+    class BaseCanvasReceiptRenderer {
+      #canvas;
+      #ctx;
+      #width = 900;
+      #height = 1400;
+      #dpr = 1;
+      #noiseTile = null;
+
+      constructor(canvasElement) {
+        if (new.target === BaseCanvasReceiptRenderer) {
+          throw new TypeError("Cannot instantiate abstract BaseCanvasReceiptRenderer directly");
+        }
+        this.#canvas = canvasElement;
+        this.#ctx = canvasElement.getContext('2d');
+        this.#initDPI();
+        this.#generateNoiseTile();
+      }
+
+      get canvas() { return this.#canvas; }
+      get ctx() { return this.#ctx; }
+      get width() { return this.#width; }
+      get height() { return this.#height; }
+      get dpr() { return this.#dpr; }
+
+      #initDPI() {
+        this.#dpr = Math.min(window.devicePixelRatio || 1, 2);
+        this.#canvas.width = this.#width * this.#dpr;
+        this.#canvas.height = this.#height * this.#dpr;
+        this.#canvas.style.aspectRatio = "900 / 1400";
+        this.#ctx.scale(this.#dpr, this.#dpr);
+      }
+
+      #generateNoiseTile() {
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = 128;
+        offCanvas.height = 128;
+        const offCtx = offCanvas.getContext('2d');
+        const imgData = offCtx.createImageData(128, 128);
+
+        for (let i = 0; i < imgData.data.length; i += 4) {
+          const v = Math.random() > 0.5 ? 255 : 0;
+          imgData.data[i] = v;
+          imgData.data[i + 1] = v;
+          imgData.data[i + 2] = v;
+          imgData.data[i + 3] = Math.floor(Math.random() * 12) + 4;
+        }
+        offCtx.putImageData(imgData, 0, 0);
+        this.#noiseTile = offCanvas;
+      }
+
+      applyPaperGrainNoise() {
+        if (!this.#noiseTile) return;
+        this.#ctx.save();
+        const pattern = this.#ctx.createPattern(this.#noiseTile, 'repeat');
+        this.#ctx.fillStyle = pattern;
+        this.#ctx.fillRect(0, 0, this.#width, this.#height);
+        this.#ctx.restore();
+      }
+
+      drawHorizontalPrintheadMicroBanding() {
+        this.#ctx.save();
+        this.#ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+        for (let y = 14; y < this.#height - 14; y += 4) {
+          this.#ctx.fillRect(0, y, this.#width, 1);
+        }
+        this.#ctx.restore();
+      }
+
+      drawTearEdges(fillColor = "#0a0c14") {
+        this.#ctx.save();
+        this.#ctx.fillStyle = fillColor;
+
+        // Top zig-zag serrated cut
+        const toothW = 12;
+        const toothH = 10;
+        this.#ctx.beginPath();
+        this.#ctx.moveTo(0, 0);
+        for (let x = 0; x <= this.#width; x += toothW) {
+          const isPeak = Math.floor(x / toothW) % 2 === 0;
+          this.#ctx.lineTo(x, isPeak ? 0 : toothH);
+        }
+        this.#ctx.lineTo(this.#width, 0);
+        this.#ctx.closePath();
+        this.#ctx.fill();
+
+        // Bottom zig-zag serrated cut
+        this.#ctx.beginPath();
+        this.#ctx.moveTo(0, this.#height);
+        for (let x = 0; x <= this.#width; x += toothW) {
+          const isPeak = Math.floor(x / toothW) % 2 === 0;
+          this.#ctx.lineTo(x, isPeak ? this.#height : this.#height - toothH);
+        }
+        this.#ctx.lineTo(this.#width, this.#height);
+        this.#ctx.closePath();
+        this.#ctx.fill();
+
+        this.#ctx.restore();
+      }
+
+      drawBarcode(orderModel, inkColor = "#161616", yPos = 1270) {
+        this.#ctx.save();
+        const str = orderModel.barcodeText;
+        const startX = 140;
+        const barcodeWidth = 620;
+        const barHeight = 65;
+
+        // Draw procedural vertical bars
+        let curX = startX;
+        let seed = 42;
+        for (let i = 0; i < str.length; i++) {
+          seed = (seed * 31 + str.charCodeAt(i)) % 9973;
+        }
+
+        this.#ctx.fillStyle = inkColor;
+        while (curX < startX + barcodeWidth) {
+          seed = (seed * 9301 + 49297) % 233280;
+          const rand = seed / 233280.0;
+          const barW = rand > 0.65 ? 4 : (rand > 0.35 ? 2 : 1);
+          const gapW = rand > 0.5 ? 2 : 3;
+
+          this.#ctx.fillRect(curX, yPos, barW, barHeight);
+          curX += barW + gapW;
+        }
+
+        // Barcode caption
+        this.#ctx.font = "600 13px 'Space Mono', monospace";
+        this.#ctx.textAlign = "center";
+        this.#ctx.fillText(`* ${str} *`, this.#width / 2, yPos + barHeight + 18);
+        this.#ctx.font = "700 11px 'Space Mono', monospace";
+        this.#ctx.fillStyle = inkColor;
+        this.#ctx.fillText("PRINTED AT PLOTTWISTRECEIPT.COM // NO REFUNDS FOR EMOTIONAL DAMAGE", this.#width / 2, yPos + barHeight + 35);
+
+        this.#ctx.restore();
+      }
+
+      render(orderModel) {
+        this.#ctx.save();
+        this.drawBackground();
+        this.drawHeader(orderModel);
+        this.drawItems(orderModel);
+        this.drawTaxes(orderModel);
+        this.drawBarcode(orderModel);
+        this.drawHorizontalPrintheadMicroBanding();
+        this.drawTearEdges();
+        this.applyPaperGrainNoise();
+        this.#ctx.restore();
+      }
+
+      drawBackground() { throw new Error("drawBackground() must be implemented"); }
+      drawHeader(model) { throw new Error("drawHeader() must be implemented"); }
+      drawItems(model) { throw new Error("drawItems() must be implemented"); }
+      drawTaxes(model) { throw new Error("drawTaxes() must be implemented"); }
+    }
+
+
+    /* =========================================================================
+     * 4. Theme 1: SupermarketThermalRenderer
+     * ========================================================================= */
+    class SupermarketThermalRenderer extends BaseCanvasReceiptRenderer {
+      drawBackground() {
+        const ctx = this.ctx;
+        // Paper background
+        ctx.fillStyle = "#fafaf8";
+        ctx.fillRect(0, 0, this.width, this.height);
+
+        // Subtle side margin crease shadows
+        const leftGrad = ctx.createLinearGradient(0, 0, 30, 0);
+        leftGrad.addColorStop(0, "rgba(0,0,0,0.06)");
+        leftGrad.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = leftGrad;
+        ctx.fillRect(0, 0, 30, this.height);
+
+        const rightGrad = ctx.createLinearGradient(this.width, 0, this.width - 30, 0);
+        rightGrad.addColorStop(0, "rgba(0,0,0,0.06)");
+        rightGrad.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = rightGrad;
+        ctx.fillRect(this.width - 30, 0, 30, this.height);
+      }
+
+      drawHeader(model) {
+        const ctx = this.ctx;
+        ctx.save();
+        ctx.fillStyle = "#161616";
+        ctx.textAlign = "center";
+
+        // ASCII Store Banner
+        ctx.font = "700 24px 'Space Mono', monospace";
+        ctx.fillText("========================================", this.width / 2, 60);
+        ctx.fillText("★ PLOT TWIST RECEIPT STUDIO ★", this.width / 2, 92);
+        ctx.font = "600 15px 'Space Mono', monospace";
+        ctx.fillText("--- 2026 REALITY CHECK STORE #2026 ---", this.width / 2, 118);
+        ctx.font = "700 24px 'Space Mono', monospace";
+        ctx.fillText("========================================", this.width / 2, 142);
+
+        // Store Subtext
+        ctx.font = "14px 'Space Mono', monospace";
+        ctx.fillText(`OPERATOR: ${model.cashier} // REG #04`, this.width / 2, 172);
+        ctx.fillText(`TIMESTAMP: ${model.date}`, this.width / 2, 196);
+        ctx.font = "700 16px 'Space Mono', monospace";
+        ctx.fillText(`MANIFEST: ${model.title}`, this.width / 2, 226);
+
+        // Dashed separator
+        ctx.font = "14px 'Space Mono', monospace";
+        ctx.fillText("------------------------------------------------------------", this.width / 2, 248);
+
+        // Table Header
+        ctx.textAlign = "left";
+        ctx.font = "700 14px 'Space Mono', monospace";
+        ctx.fillText("ITEM DESCRIPTION", 70, 272);
+        ctx.textAlign = "center";
+        ctx.fillText("QTY", 620, 272);
+        ctx.textAlign = "right";
+        ctx.fillText("PRICE ($)", 830, 272);
+
+        ctx.textAlign = "center";
+        ctx.font = "14px 'Space Mono', monospace";
+        ctx.fillText("------------------------------------------------------------", this.width / 2, 292);
+
+        ctx.restore();
+      }
+
+      drawItems(model) {
+        const ctx = this.ctx;
+        ctx.save();
+        let curY = 320;
+
+        const items = model.items;
+        for (let i = 0; i < Math.min(items.length, 10); i++) {
+          const item = items[i];
+
+          // Item text
+          ctx.font = item.isPlotTwist ? "700 15px 'Space Mono', monospace" : "500 14px 'Space Mono', monospace";
+          ctx.fillStyle = item.isPlotTwist ? "#991b1b" : "#161616";
+
+          ctx.textAlign = "left";
+          const prefix = item.isPlotTwist ? "⚡ [PLOT TWIST] " : "• ";
+          let name = prefix + item.name;
+          if (name.length > 34) name = name.substring(0, 32) + "..";
+          ctx.fillText(name, 70, curY);
+
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#161616";
+          ctx.fillText(String(item.qty), 620, curY);
+
+          ctx.textAlign = "right";
+          ctx.font = "700 15px 'Space Mono', monospace";
+          ctx.fillStyle = item.isPlotTwist ? "#991b1b" : "#161616";
+          ctx.fillText((item.qty * item.price).toFixed(2), 830, curY);
+
+          curY += 34;
+        }
+
+        ctx.textAlign = "center";
+        ctx.font = "14px 'Space Mono', monospace";
+        ctx.fillStyle = "#161616";
+        ctx.fillText("------------------------------------------------------------", this.width / 2, curY + 10);
+
+        ctx.restore();
+      }
+
+      drawTaxes(model) {
+        const ctx = this.ctx;
+        ctx.save();
+        const taxes = model.calculateTaxesAndDiscounts();
+        let startY = 770;
+
+        ctx.font = "14px 'Space Mono', monospace";
+        ctx.fillStyle = "#161616";
+
+        const printRow = (label, val, isBold = false, isDiscount = false) => {
+          ctx.font = isBold ? "700 16px 'Space Mono', monospace" : "14px 'Space Mono', monospace";
+          ctx.textAlign = "left";
+          ctx.fillText(label, 70, startY);
+          ctx.textAlign = "right";
+          ctx.fillText((isDiscount ? "-$" : "$") + Math.abs(val).toFixed(2), 830, startY);
+          startY += 28;
+        };
+
+        printRow("EMOTIONAL SUBTOTAL", taxes.subtotal);
+        printRow("+ CHAI / CAFFEINE SURCHARGE", taxes.chaiSurcharge);
+        printRow("+ OVERTHINKING TAX (18%)", taxes.overthinkingTax);
+        printRow("- DELUSION DISCOUNT (CAPPED)", taxes.delusionDiscount, false, true);
+        printRow("+ IMPULSE RECOVERY SURCHARGE", taxes.impulseSurcharge);
+        printRow("+ SPITE TIP (15%)", taxes.spiteTip);
+
+        // Double Rule
+        ctx.textAlign = "center";
+        ctx.font = "700 20px 'Space Mono', monospace";
+        ctx.fillText("========================================", this.width / 2, startY + 10);
+
+        // Bold Total
+        ctx.font = "800 24px 'Space Mono', monospace";
+        ctx.textAlign = "left";
+        ctx.fillText("TOTAL EMOTIONAL DAMAGE:", 70, startY + 45);
+        ctx.textAlign = "right";
+        ctx.fillText(`$${taxes.finalTotal.toFixed(2)}`, 830, startY + 45);
+
+        ctx.textAlign = "center";
+        ctx.font = "700 20px 'Space Mono', monospace";
+        ctx.fillText("========================================", this.width / 2, startY + 75);
+
+        // Survival Rating
+        ctx.font = "700 18px 'Space Mono', monospace";
+        ctx.fillStyle = "#991b1b";
+        ctx.fillText(`[ ${model.survivalRating} ]`, this.width / 2, startY + 115);
+
+        ctx.font = "13px 'Space Mono', monospace";
+        ctx.fillStyle = "#4b5563";
+        ctx.fillText("CARD: **** **** **** 2026 // AUTH CODE: REGRET_99", this.width / 2, startY + 145);
+        ctx.fillText("ALL REALITY PURCHASES ARE STRICTLY FINAL", this.width / 2, startY + 168);
+
+        ctx.restore();
+      }
+    }
+
+
+    /* =========================================================================
+     * 5. Theme 2: AviationBoardingPassRenderer
+     * ========================================================================= */
+    class AviationBoardingPassRenderer extends BaseCanvasReceiptRenderer {
+      drawBackground() {
+        const ctx = this.ctx;
+        // Cream cardstock
+        ctx.fillStyle = "#f5eedc";
+        ctx.fillRect(0, 0, this.width, this.height);
+
+        // Deep navy header banner
+        ctx.fillStyle = "#0e1e38";
+        ctx.fillRect(0, 0, this.width, 130);
+
+        // Golden amber accent line
+        ctx.fillStyle = "#d97706";
+        ctx.fillRect(0, 130, this.width, 8);
+
+        // Perforated vertical tear edge line at x = 680
+        ctx.save();
+        ctx.strokeStyle = "rgba(14, 30, 56, 0.4)";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 8]);
+        ctx.beginPath();
+        ctx.moveTo(680, 138);
+        ctx.lineTo(680, this.height);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      drawHeader(model) {
+        const ctx = this.ctx;
+        ctx.save();
+
+        // Header text inside navy banner
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "800 24px 'Space Mono', monospace";
+        ctx.fillText("AIR DELUSION 2026 ✈", 50, 60);
+        ctx.font = "600 14px 'Space Mono', monospace";
+        ctx.fillStyle = "#93c5fd";
+        ctx.fillText("PRIORITY BOARDING PASS // REALITY MANIFEST", 50, 90);
+
+        // Right boarding counterfoil banner
+        ctx.fillStyle = "#fde68a";
+        ctx.font = "700 16px 'Space Mono', monospace";
+        ctx.fillText("FLIGHT AD-2026", 700, 60);
+        ctx.font = "12px 'Space Mono', monospace";
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText("BOARDING PASS", 700, 85);
+
+        // Flight Route Box
+        ctx.fillStyle = "#0e1e38";
+        ctx.font = "700 13px 'Space Mono', monospace";
+        ctx.fillText("ORIGIN (PLANNED)", 50, 175);
+        ctx.fillText("DESTINATION (REALITY)", 380, 175);
+
+        ctx.font = "800 28px 'Space Mono', monospace";
+        ctx.fillStyle = "#1e3a8a";
+        ctx.fillText("HIGH HOPES [PLN]", 50, 212);
+        ctx.fillText("TOTAL RUIN [PWT]", 380, 212);
+
+        // Metadata grid
+        ctx.fillStyle = "#0e1e38";
+        ctx.font = "600 12px 'Space Mono', monospace";
+        ctx.fillText(`PASSENGER: ${model.cashier}`, 50, 255);
+        ctx.fillText("CABIN: DELUSION FIRST CLASS", 50, 275);
+        ctx.fillText("GATE: CHAOS-4", 380, 255);
+        ctx.fillText("SEAT: 1A", 380, 275);
+
+        // Right counterfoil metadata
+        ctx.fillText("SEAT: 1A", 700, 180);
+        ctx.fillText("ZONE: 1", 700, 205);
+        ctx.fillText("GATE: C-4", 700, 230);
+        ctx.fillText("TIME: 00:00", 700, 255);
+
+        // Separator line
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(50, 295);
+        ctx.lineTo(650, 295);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      drawItems(model) {
+        const ctx = this.ctx;
+        ctx.save();
+        ctx.fillStyle = "#0e1e38";
+
+        ctx.font = "700 14px 'Space Mono', monospace";
+        ctx.fillText("MANIFEST ITEM / EMOTIONAL BAGGAGE", 50, 325);
+        ctx.textAlign = "right";
+        ctx.fillText("FEE ($)", 650, 325);
+
+        let curY = 360;
+        const items = model.items;
+        for (let i = 0; i < Math.min(items.length, 9); i++) {
+          const item = items[i];
+
+          ctx.textAlign = "left";
+          ctx.font = item.isPlotTwist ? "700 14px 'Space Mono', monospace" : "500 13px 'Space Mono', monospace";
+          ctx.fillStyle = item.isPlotTwist ? "#b91c1c" : "#0e1e38";
+
+          let name = (item.isPlotTwist ? "⚠ " : "✓ ") + item.name;
+          if (name.length > 30) name = name.substring(0, 28) + "..";
+          ctx.fillText(name, 50, curY);
+
+          ctx.textAlign = "right";
+          ctx.fillText((item.qty * item.price).toFixed(2), 650, curY);
+
+          curY += 34;
+        }
+
+        ctx.restore();
+      }
+
+      drawTaxes(model) {
+        const ctx = this.ctx;
+        ctx.save();
+        const taxes = model.calculateTaxesAndDiscounts();
+
+        // Right Detachable Counterfoil Distress Stamp
+        ctx.save();
+        ctx.translate(780, 520);
+        ctx.rotate(-Math.PI / 2);
+        ctx.strokeStyle = "#b91c1c";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-160, -40, 320, 80);
+        ctx.fillStyle = "#b91c1c";
+        ctx.font = "800 20px 'Space Mono', monospace";
+        ctx.textAlign = "center";
+        ctx.fillText("FLIGHT CANCELLED", 0, -5);
+        ctx.font = "700 12px 'Space Mono', monospace";
+        ctx.fillText("NO EMOTIONAL REFUND", 0, 22);
+        ctx.restore();
+
+        // Left Taxes
+        let startY = 740;
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(50, startY);
+        ctx.lineTo(650, startY);
+        ctx.stroke();
+
+        startY += 30;
+        ctx.fillStyle = "#0e1e38";
+        ctx.font = "14px 'Space Mono', monospace";
+
+        const printRow = (label, val, isDiscount = false) => {
+          ctx.textAlign = "left";
+          ctx.fillText(label, 50, startY);
+          ctx.textAlign = "right";
+          ctx.fillText((isDiscount ? "-$" : "$") + Math.abs(val).toFixed(2), 650, startY);
+          startY += 26;
+        };
+
+        printRow("SUBTOTAL BAGGAGE CHARGES", taxes.subtotal);
+        printRow("+ JET FUEL & CHAI SURCHARGE", taxes.chaiSurcharge);
+        printRow("+ OVERTHINKING TARIFF (18%)", taxes.overthinkingTax);
+        printRow("- OPTIMISM DISCOUNT (MAX)", taxes.delusionDiscount, true);
+        printRow("+ IMPULSE CARRY-ON CHARGE", taxes.impulseSurcharge);
+        printRow("+ CREW SPITE GRATUITY (15%)", taxes.spiteTip);
+
+        // Bold Total
+        startY += 10;
+        ctx.fillStyle = "#0e1e38";
+        ctx.fillRect(50, startY, 600, 55);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "800 20px 'Space Mono', monospace";
+        ctx.textAlign = "left";
+        ctx.fillText("TOTAL FLIGHT FARE:", 70, startY + 36);
+        ctx.textAlign = "right";
+        ctx.fillText(`$${taxes.finalTotal.toFixed(2)}`, 630, startY + 36);
+
+        // Boarding Grade
+        ctx.fillStyle = "#b91c1c";
+        ctx.font = "700 16px 'Space Mono', monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(model.survivalRating, 350, startY + 95);
+
+        ctx.restore();
+      }
+    }
+
+
+    /* =========================================================================
+     * 6. Theme 3: MidnightCafeTicketRenderer
+     * ========================================================================= */
+    class MidnightCafeTicketRenderer extends BaseCanvasReceiptRenderer {
+      drawBackground() {
+        const ctx = this.ctx;
+        // Dark slate craft paper
+        ctx.fillStyle = "#22242a";
+        ctx.fillRect(0, 0, this.width, this.height);
+
+        // Faint coffee cup stain ring
+        ctx.save();
+        ctx.strokeStyle = "rgba(245, 158, 11, 0.08)";
+        ctx.lineWidth = 14;
+        ctx.beginPath();
+        ctx.arc(710, 320, 110, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(245, 158, 11, 0.04)";
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.arc(710, 320, 102, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      drawHeader(model) {
+        const ctx = this.ctx;
+        ctx.save();
+
+        // Amber header text
+        ctx.fillStyle = "#ffc86b";
+        ctx.textAlign = "center";
+        ctx.font = "700 24px 'Courier Prime', monospace";
+        ctx.fillText("✦ MIDNIGHT REALITY CAFE ✦", this.width / 2, 65);
+        ctx.font = "500 14px 'Courier Prime', monospace";
+        ctx.fillStyle = "#d1d5db";
+        ctx.fillText("TOKYO • BERLIN • 2026 SIMULATION", this.width / 2, 95);
+        ctx.fillText(`TABLE #07  •  SERVER: ${model.cashier}`, this.width / 2, 120);
+        ctx.fillText(`ORDER TIME: ${model.date}`, this.width / 2, 145);
+
+        // Star Divider
+        ctx.fillStyle = "#ffc86b";
+        ctx.font = "16px 'Courier Prime', monospace";
+        ctx.fillText("★ ————————— ★ ————————— ★ ————————— ★", this.width / 2, 180);
+
+        ctx.font = "700 18px 'Courier Prime', monospace";
+        ctx.fillStyle = "#f3efe6";
+        ctx.fillText(model.title, this.width / 2, 215);
+
+        ctx.font = "16px 'Courier Prime', monospace";
+        ctx.fillStyle = "#ffc86b";
+        ctx.fillText("★ ————————— ★ ————————— ★ ————————— ★", this.width / 2, 245);
+
+        // Column Titles
+        ctx.font = "700 15px 'Courier Prime', monospace";
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "left";
+        ctx.fillText("ORDER ITEM", 80, 280);
+        ctx.textAlign = "right";
+        ctx.fillText("AMOUNT ($)", 820, 280);
+
+        ctx.restore();
+      }
+
+      drawItems(model) {
+        const ctx = this.ctx;
+        ctx.save();
+        let curY = 320;
+        const items = model.items;
+
+        for (let i = 0; i < Math.min(items.length, 9); i++) {
+          const item = items[i];
+
+          ctx.textAlign = "left";
+          ctx.font = item.isPlotTwist ? "700 16px 'Courier Prime', monospace" : "500 15px 'Courier Prime', monospace";
+          ctx.fillStyle = item.isPlotTwist ? "#ff7675" : "#f3efe6";
+
+          let name = (item.isPlotTwist ? ">> " : "   ") + `${item.qty}x ${item.name}`;
+          if (name.length > 34) name = name.substring(0, 32) + "..";
+          ctx.fillText(name, 80, curY);
+
+          ctx.textAlign = "right";
+          ctx.fillText((item.qty * item.price).toFixed(2), 820, curY);
+
+          curY += 36;
+        }
+
+        ctx.restore();
+      }
+
+      drawTaxes(model) {
+        const ctx = this.ctx;
+        ctx.save();
+        const taxes = model.calculateTaxesAndDiscounts();
+
+        // Distressed Rubber Stamps
+        ctx.save();
+        ctx.translate(680, 880);
+        ctx.rotate(-0.16);
+        ctx.strokeStyle = "rgba(255, 92, 92, 0.75)";
+        ctx.lineWidth = 4;
+        ctx.strokeRect(-120, -35, 240, 70);
+        ctx.fillStyle = "rgba(255, 92, 92, 0.85)";
+        ctx.font = "800 18px 'Courier Prime', monospace";
+        ctx.textAlign = "center";
+        ctx.fillText("★ PAID IN TEARS ★", 0, -2);
+        ctx.font = "700 12px 'Courier Prime', monospace";
+        ctx.fillText("SERVED COLD 2026", 0, 20);
+        ctx.restore();
+
+        // Taxes
+        let startY = 740;
+        ctx.font = "16px 'Courier Prime', monospace";
+        ctx.fillStyle = "#ffc86b";
+        ctx.textAlign = "center";
+        ctx.fillText("— — — — — — — — — — — — — — — — — — — — —", this.width / 2, startY);
+
+        startY += 30;
+        ctx.fillStyle = "#f3efe6";
+
+        const printRow = (label, val, isDiscount = false) => {
+          ctx.textAlign = "left";
+          ctx.fillText(label, 80, startY);
+          ctx.textAlign = "right";
+          ctx.fillText((isDiscount ? "-$" : "$") + Math.abs(val).toFixed(2), 820, startY);
+          startY += 26;
+        };
+
+        printRow("CAFE SUBTOTAL", taxes.subtotal);
+        printRow("+ CHAI / ESPRESSO SURCHARGE", taxes.chaiSurcharge);
+        printRow("+ LATE NIGHT OVERTHINK TAX (18%)", taxes.overthinkingTax);
+        printRow("- DELUSIONAL COMP COUPON", taxes.delusionDiscount, true);
+        printRow("+ IMPULSE TABLE SURCHARGE", taxes.impulseSurcharge);
+        printRow("+ SERVER SPITE GRATUITY (15%)", taxes.spiteTip);
+
+        startY += 10;
+        ctx.fillStyle = "#ffc86b";
+        ctx.font = "800 24px 'Courier Prime', monospace";
+        ctx.textAlign = "left";
+        ctx.fillText("CHECK TOTAL:", 80, startY + 30);
+        ctx.textAlign = "right";
+        ctx.fillText(`$${taxes.finalTotal.toFixed(2)}`, 820, startY + 30);
+
+        ctx.font = "700 16px 'Courier Prime', monospace";
+        ctx.fillStyle = "#ff7675";
+        ctx.textAlign = "center";
+        ctx.fillText(`[ ${model.survivalRating} ]`, this.width / 2, startY + 80);
+
+        ctx.restore();
+      }
+
+      drawBarcode(orderModel) {
+        super.drawBarcode(orderModel, "#f3efe6", 1260);
+      }
+    }
+
+
+    /* =========================================================================
+     * 7. ReceiptStudioUIController (UI Events, GSAP Paper-Feed, Export & Share)
+     * ========================================================================= */
+    class ReceiptStudioUIController {
+      #canvasElement;
+      #activeRenderer;
+      #renderers = new Map();
+      #orderModel;
+      #audioEngine;
+      #containerElement;
+
+      constructor(canvasElement, containerElement) {
+        this.#canvasElement = canvasElement;
+        this.#containerElement = containerElement;
+      }
+
+      init() {
+        // Instantiate sound and model
+        this.#audioEngine = new ThermalPrinterAudioEngine();
+        this.#orderModel = new ReceiptOrderModel('sprint');
+
+        // Instantiate polymorphic renderers
+        this.#renderers.set('thermal', new SupermarketThermalRenderer(this.#canvasElement));
+        this.#renderers.set('boarding', new AviationBoardingPassRenderer(this.#canvasElement));
+        this.#renderers.set('cafe', new MidnightCafeTicketRenderer(this.#canvasElement));
+
+        this.#activeRenderer = this.#renderers.get('thermal');
+
+        this.#bindEventListeners();
+        this.#renderItemsList();
+        this.#updateTaxSummary();
+        this.renderReceipt();
+
+        // Autoplay unlock gesture listener
+        const unlockAudio = () => {
+          this.#audioEngine.init();
+          window.removeEventListener('pointerdown', unlockAudio);
+          window.removeEventListener('keydown', unlockAudio);
+        };
+        window.addEventListener('pointerdown', unlockAudio, { once: true });
+        window.addEventListener('keydown', unlockAudio, { once: true });
+      }
+
+      #bindEventListeners() {
+        // Preset Switchers
+        const presetButtons = document.querySelectorAll('[data-preset]');
+        presetButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const presetId = btn.getAttribute('data-preset');
+            this.loadPreset(presetId);
+          });
+        });
+
+        // Theme Switchers
+        const themeButtons = document.querySelectorAll('[data-theme]');
+        themeButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const themeId = btn.getAttribute('data-theme');
+            this.switchTheme(themeId);
+          });
+        });
+
+        // Add Item Form
+        const addItemBtn = document.getElementById('add-item-btn');
+        const typeToggleBtn = document.getElementById('item-type-toggle-btn');
+        let isPlotTwist = true;
+
+        if (typeToggleBtn) {
+          typeToggleBtn.addEventListener('click', () => {
+            isPlotTwist = !isPlotTwist;
+            typeToggleBtn.textContent = isPlotTwist ? "Plot Twist" : "Planned";
+            if (isPlotTwist) {
+              typeToggleBtn.className = "w-full py-2 px-2 rounded-lg bg-rose-950/50 border border-rose-800 text-[11px] font-bold text-rose-300 hover:bg-rose-900/60 transition-all text-center";
+            } else {
+              typeToggleBtn.className = "w-full py-2 px-2 rounded-lg bg-cyan-950/50 border border-cyan-800 text-[11px] font-bold text-cyan-300 hover:bg-cyan-900/60 transition-all text-center";
+            }
+            this.#audioEngine.playButtonTick();
+          });
+        }
+
+        if (addItemBtn) {
+          addItemBtn.addEventListener('click', () => {
+            const nameInput = document.getElementById('item-name-input');
+            const qtyInput = document.getElementById('item-qty-input');
+            const priceInput = document.getElementById('item-price-input');
+
+            const name = nameInput.value.trim();
+            const qty = parseInt(qtyInput.value, 10) || 1;
+            const price = parseFloat(priceInput.value) || 0;
+
+            if (!name) return;
+
+            this.#orderModel.addItem(name, qty, price, isPlotTwist);
+            nameInput.value = "";
+            this.#audioEngine.playButtonTick();
+            this.#renderItemsList();
+            this.#updateTaxSummary();
+            this.renderReceipt();
+          });
+        }
+
+        // Reprint / Feed Trigger Button
+        const reprintBtn = document.getElementById('reprint-btn');
+        if (reprintBtn) {
+          reprintBtn.addEventListener('click', () => {
+            this.triggerPaperFeedAnimation();
+          });
+        }
+
+        // Click canvas to trigger reprint
+        this.#canvasElement.addEventListener('click', () => {
+          this.triggerPaperFeedAnimation();
+        });
+
+        // Export PNG Buttons
+        const exportBtn = document.getElementById('canvas-download-btn');
+        const headerExportBtn = document.getElementById('header-export-btn');
+        const triggerExport = () => this.exportHDImage();
+
+        if (exportBtn) exportBtn.addEventListener('click', triggerExport);
+        if (headerExportBtn) headerExportBtn.addEventListener('click', triggerExport);
+
+        // Share Buttons
+        const shareBtn = document.getElementById('canvas-share-btn');
+        const headerShareBtn = document.getElementById('header-share-btn');
+        const triggerShare = () => this.shareReceipt();
+
+        if (shareBtn) shareBtn.addEventListener('click', triggerShare);
+        if (headerShareBtn) headerShareBtn.addEventListener('click', triggerShare);
+
+        // Mute Toggle Button
+        const muteBtn = document.getElementById('mute-toggle-btn');
+        if (muteBtn) {
+          this.#updateMuteButtonUI();
+          muteBtn.addEventListener('click', () => {
+            this.#audioEngine.toggleMute();
+            this.#updateMuteButtonUI();
+          });
+        }
+
+        // Spotlight Mouse Tracking on Cards
+        const spotlightCards = document.querySelectorAll('.spotlight-card');
+        spotlightCards.forEach(card => {
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+          });
+        });
+      }
+
+      #updateMuteButtonUI() {
+        const muteLabel = document.getElementById('mute-label');
+        const muteIcon = document.getElementById('mute-icon');
+        if (!muteIcon) return;
+
+        if (this.#audioEngine.isMuted) {
+          muteIcon.setAttribute('data-lucide', 'volume-x');
+          if (muteLabel) muteLabel.textContent = "AUDIO MUTED";
+          muteIcon.classList.remove('text-cyan-400');
+          muteIcon.classList.add('text-slate-500');
+        } else {
+          muteIcon.setAttribute('data-lucide', 'volume-2');
+          if (muteLabel) muteLabel.textContent = "AUDIO ON";
+          muteIcon.classList.remove('text-slate-500');
+          muteIcon.classList.add('text-cyan-400');
+        }
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      loadPreset(presetId) {
+        this.#orderModel.loadPreset(presetId);
+        this.#audioEngine.playButtonTick();
+
+        // Update active preset UI button
+        document.querySelectorAll('[data-preset]').forEach(btn => {
+          if (btn.getAttribute('data-preset') === presetId) {
+            btn.classList.add('border-cyan-500/50', 'bg-cyan-950/30');
+            btn.classList.remove('border-slate-700/60', 'bg-slate-900/40');
+          } else {
+            btn.classList.remove('border-cyan-500/50', 'bg-cyan-950/30');
+            btn.classList.add('border-slate-700/60', 'bg-slate-900/40');
+          }
+        });
+
+        this.#renderItemsList();
+        this.#updateTaxSummary();
+        this.renderReceipt();
+        this.triggerPaperFeedAnimation();
+      }
+
+      switchTheme(themeId) {
+        const renderer = this.#renderers.get(themeId);
+        if (!renderer) return;
+
+        this.#activeRenderer = renderer;
+        this.#audioEngine.playButtonTick();
+
+        // Update theme buttons
+        document.querySelectorAll('[data-theme]').forEach(btn => {
+          if (btn.getAttribute('data-theme') === themeId) {
+            btn.classList.add('border-cyan-500/60', 'bg-cyan-950/30');
+            btn.classList.remove('border-slate-700/60', 'bg-slate-900/40');
+          } else {
+            btn.classList.remove('border-cyan-500/60', 'bg-cyan-950/30');
+            btn.classList.add('border-slate-700/60', 'bg-slate-900/40');
+          }
+        });
+
+        this.renderReceipt();
+      }
+
+      renderReceipt() {
+        this.#activeRenderer.render(this.#orderModel);
+      }
+
+      triggerPaperFeedAnimation() {
+        if (window.gsap) {
+          gsap.killTweensOf(this.#canvasElement);
+          gsap.fromTo(this.#canvasElement,
+            { y: -280, opacity: 0.35, scaleY: 0.96 },
+            { y: 0, opacity: 1, scaleY: 1, duration: 1.1, ease: "power3.out" }
+          );
+        }
+        this.#audioEngine.playPrinterFeed(800);
+      }
+
+      #renderItemsList() {
+        const container = document.getElementById('items-list-container');
+        if (!container) return;
+        container.innerHTML = "";
+
+        const items = this.#orderModel.items;
+        items.forEach((item, index) => {
+          const row = document.createElement('div');
+          row.className = "p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between gap-3 text-xs";
+
+          const left = document.createElement('div');
+          left.className = "flex items-center gap-2 overflow-hidden";
+
+          const badge = document.createElement('span');
+          badge.className = item.isPlotTwist 
+            ? "px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-950 text-rose-300 border border-rose-800/60 uppercase shrink-0"
+            : "px-1.5 py-0.5 rounded text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800/60 uppercase shrink-0";
+          badge.textContent = item.isPlotTwist ? "TWIST" : "PLAN";
+
+          const title = document.createElement('span');
+          title.className = "text-slate-200 truncate";
+          title.textContent = `${item.qty}x ${item.name} ($${item.price.toFixed(2)})`;
+
+          left.appendChild(badge);
+          left.appendChild(title);
+
+          const right = document.createElement('div');
+          right.className = "flex items-center gap-1.5 shrink-0";
+
+          // Toggle twist button
+          const toggleBtn = document.createElement('button');
+          toggleBtn.className = "p-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-cyan-300 transition-colors";
+          toggleBtn.title = "Toggle Plot Twist";
+          toggleBtn.innerHTML = '<i data-lucide="shuffle" class="w-3.5 h-3.5"></i>';
+          toggleBtn.addEventListener('click', () => {
+            this.#orderModel.toggleItemPlotTwist(index);
+            this.#audioEngine.playButtonTick();
+            this.#renderItemsList();
+            this.#updateTaxSummary();
+            this.renderReceipt();
+          });
+
+          // Delete button
+          const delBtn = document.createElement('button');
+          delBtn.className = "p-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition-colors";
+          delBtn.title = "Delete Item";
+          delBtn.innerHTML = '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>';
+          delBtn.addEventListener('click', () => {
+            this.#orderModel.removeItem(index);
+            this.#audioEngine.playButtonTick();
+            this.#renderItemsList();
+            this.#updateTaxSummary();
+            this.renderReceipt();
+          });
+
+          right.appendChild(toggleBtn);
+          right.appendChild(delBtn);
+
+          row.appendChild(left);
+          row.appendChild(right);
+          container.appendChild(row);
+        });
+
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      #updateTaxSummary() {
+        const taxes = this.#orderModel.calculateTaxesAndDiscounts();
+
+        const elSubtotal = document.getElementById('tax-subtotal');
+        const elOverthinking = document.getElementById('tax-overthinking');
+        const elDelusion = document.getElementById('tax-delusion');
+        const elSpite = document.getElementById('tax-spite');
+        const elFinal = document.getElementById('tax-final-total');
+        const elGrade = document.getElementById('tax-survival-grade');
+
+        if (elSubtotal) elSubtotal.textContent = `$${taxes.subtotal.toFixed(2)}`;
+        if (elOverthinking) elOverthinking.textContent = `+$${taxes.overthinkingTax.toFixed(2)}`;
+        if (elDelusion) elDelusion.textContent = `-$${taxes.delusionDiscount.toFixed(2)}`;
+        if (elSpite) elSpite.textContent = `+$${taxes.spiteTip.toFixed(2)}`;
+        if (elFinal) elFinal.textContent = `$${taxes.finalTotal.toFixed(2)}`;
+        if (elGrade) elGrade.textContent = this.#orderModel.survivalRating;
+      }
+
+      exportHDImage() {
+        this.#audioEngine.playPaperTear();
+
+        // Canvas Confetti Celebration
+        if (window.confetti) {
+          window.confetti({
+            particleCount: 60,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+
+        this.#canvasElement.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          const ts = new Date().toISOString().replace(/[:.]/g, '-');
+          a.download = `plottwist-receipt-${this.#orderModel.presetId}-${ts}.png`;
+          a.href = url;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          this.#showToast("HD PNG receipt downloaded successfully!");
+        }, 'image/png');
+      }
+
+      async shareReceipt() {
+        this.#audioEngine.playButtonTick();
+        const shareText = `📄 My 2026 Expectation vs Reality Receipt:\n${this.#orderModel.title}\nEmotional Total: $${this.#orderModel.calculateTaxesAndDiscounts().finalTotal.toFixed(2)}\nRating: ${this.#orderModel.survivalRating}\n\nPrint yours at https://viral-suite.vercel.app/receipt`;
+
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "Plot Twist Receipt 2026",
+              text: shareText,
+              url: window.location.href
+            });
+            this.#showToast("Shared successfully!");
+            return;
+          } catch (e) {
+            // User cancelled or share failed, fallback to clipboard
+          }
+        }
+
+        // Fallback: Copy to clipboard
+        try {
+          await navigator.clipboard.writeText(shareText);
+          this.#showToast("Receipt copied to clipboard! Ready to paste.");
+        } catch (err) {
+          this.#showToast("Share link ready at plottwistreceipt.com");
+        }
+      }
+
+      #showToast(message) {
+        const toast = document.getElementById('toast-notification');
+        const toastMsg = document.getElementById('toast-message');
+        if (!toast || !toastMsg) return;
+
+        toastMsg.textContent = message;
+        if (window.gsap) {
+          gsap.killTweensOf(toast);
+          gsap.fromTo(toast,
+            { y: -80, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }
+          );
+          gsap.to(toast, {
+            y: -80,
+            opacity: 0,
+            duration: 0.4,
+            delay: 3.2,
+            ease: "power3.in"
+          });
+        }
+      }
+    }
+
+
+    /* =========================================================================
+     * 8. Global Class Exposure (Ensures 100% OOP Test Suite Probing)
+     * ========================================================================= */
+    window.ThermalPrinterAudioEngine = ThermalPrinterAudioEngine;
+    window.ReceiptOrderModel = ReceiptOrderModel;
+    window.BaseCanvasReceiptRenderer = BaseCanvasReceiptRenderer;
+    window.SupermarketThermalRenderer = SupermarketThermalRenderer;
+    window.AviationBoardingPassRenderer = AviationBoardingPassRenderer;
+    window.MidnightCafeTicketRenderer = MidnightCafeTicketRenderer;
+    window.ReceiptStudioUIController = ReceiptStudioUIController;
+
+
+    /* =========================================================================
+     * 9. Application Bootstrap & Lenis 1.1 Inertia Scrolling
+     * ========================================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize Lenis Smooth Scrolling
+      if (typeof window.Lenis !== 'undefined') {
+        const lenis = new window.Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true
+        });
+        window.lenis = lenis;
+
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      }
+
+      // 2. Initialize Lucide Icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // 3. Initialize Receipt Studio UI Controller
+      const canvas = document.getElementById('receipt-canvas');
+      const container = document.getElementById('receipt-stage');
+      if (canvas) {
+        const controller = new ReceiptStudioUIController(canvas, container);
+        controller.init();
+        window.receiptController = controller;
+      }
+    });
+  </script>
+</body>
+</html>

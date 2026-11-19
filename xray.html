@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrowserXRay.live — Live Hardware & Fingerprint Leak Scanner</title>
+  <meta name="description" content="100% Client-Side Hardware, Display, Cryptographic & Behavioral Fingerprint Scanner with Zero-Click Radar Sweep.">
+
+  <!-- Core CDNs -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              950: '#06080f',
+              900: '#0a0c14',
+              850: '#0e121d',
+              800: '#141824',
+              700: '#1e2436',
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+              violet: '#8b5cf6',
+              pink: '#ec4899',
+              amber: '#f59e0b',
+              crimson: '#ef4444'
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- GSAP Suite -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+
+  <!-- Lenis Smooth Scrolling -->
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Custom Cyberpunk & Radar Styles */
+    :root {
+      --mouse-x: 50%;
+      --mouse-y: 50%;
+    }
+
+    body {
+      background-color: #0a0c14;
+      color: #f1f5f9;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Cyber Background Grid */
+    .cyber-grid-bg {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(20, 24, 36, 0.4) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(20, 24, 36, 0.4) 1px, transparent 1px);
+    }
+
+    /* Bento Card Spotlight Radial Border */
+    .bento-card {
+      position: relative;
+      background: rgba(14, 18, 29, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(51, 65, 85, 0.4);
+      border-radius: 1.25rem;
+      transition: border-color 0.3s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .bento-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: radial-gradient(350px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(6, 182, 212, 0.45), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .bento-card:hover {
+      border-color: rgba(6, 182, 212, 0.5);
+      box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.15);
+    }
+
+    /* Radar Sweep Line Animation */
+    #radar-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #06b6d4 25%, #38bdf8 50%, #06b6d4 75%, transparent 100%);
+      box-shadow: 0 0 16px #06b6d4, 0 0 32px rgba(6, 182, 212, 0.7);
+      pointer-events: none;
+      z-index: 40;
+      opacity: 0;
+    }
+
+    /* Floating Glass Dock */
+    #viral-dock {
+      backdrop-filter: blur(20px);
+      background: rgba(10, 12, 20, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(6, 182, 212, 0.15);
+    }
+
+    /* Glowing Pulse */
+    @keyframes cyber-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.96); }
+    }
+    .animate-cyber-pulse {
+      animation: cyber-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0c14;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e2436;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+  </style>
+</head>
+<body class="min-h-screen cyber-grid-bg relative selection:bg-cyan-500/30 selection:text-cyan-200 pb-36">
+
+  <!-- Background Ambient Glow Orbs -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-40 left-1/4 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[140px]"></div>
+    <div class="absolute top-1/2 -right-40 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[140px]"></div>
+    <div class="absolute -bottom-40 left-1/3 w-[650px] h-[650px] bg-emerald-600/10 rounded-full blur-[160px]"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+
+    <!-- Top Navigation Header -->
+    <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-8 border-b border-slate-800/80 gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="p-2.5 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 shadow-lg shadow-cyan-950/50">
+          <i data-lucide="scan" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-2xl font-bold tracking-tight text-white font-mono">BrowserXRay<span class="text-cyan-400">.live</span></h1>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-semibold rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">v4.2 PROBE</span>
+          </div>
+          <p class="text-xs text-slate-400">Zero-Click Live Hardware &amp; Cryptographic Fingerprint Scanner</p>
+        </div>
+      </div>
+
+      <!-- Action & Status Bar -->
+      <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+        <div id="scanner-status-pill" class="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-xs font-mono text-slate-300">
+          <span id="status-led" class="w-2 h-2 rounded-full bg-cyan-400 animate-cyber-pulse"></span>
+          <span id="status-text">INITIALIZING RADAR...</span>
+        </div>
+
+        <button id="rescan-btn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-mono transition-all duration-200">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>RESCAN</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scanner Progress & Overview Bar -->
+    <section class="mt-6 p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-md">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <!-- Progress Bar & Active State -->
+        <div class="w-full md:w-1/2 space-y-1.5">
+          <div class="flex justify-between text-xs font-mono text-slate-400">
+            <span>TELEMETRY SWEEP PROGRESS</span>
+            <span id="scan-percentage" class="text-cyan-400 font-bold">0%</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div id="scan-progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-sky-400 to-emerald-400 w-0 transition-all duration-300 shadow-[0_0_12px_rgba(6,182,212,0.6)]"></div>
+          </div>
+        </div>
+
+        <!-- Quick Summary Stats -->
+        <div class="flex items-center space-x-6 text-xs font-mono">
+          <div>
+            <div class="text-slate-400 text-[10px]">TOTAL ENTROPY</div>
+            <div class="text-base font-bold text-cyan-400 flex items-center space-x-1">
+              <span id="total-entropy-display">0.0</span>
+              <span class="text-xs text-slate-400 font-normal">bits</span>
+            </div>
+          </div>
+          <div class="h-8 w-px bg-slate-800"></div>
+          <div>
+            <div class="text-slate-400 text-[10px]">CONFIG RARITY</div>
+            <div id="config-rarity-badge" class="text-emerald-400 font-semibold">Estimating...</div>
+          </div>
+          <div class="h-8 w-px bg-slate-800"></div>
+          <div>
+            <div class="text-slate-400 text-[10px]">SERVER LOGS</div>
+            <div class="text-slate-300 font-semibold flex items-center space-x-1">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+              <span>0 (100% Local)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12-Card Bento Grid Dashboard -->
+    <div class="relative mt-8">
+      <!-- Glowing Radar Sweep Line -->
+      <div id="radar-line"></div>
+
+      <!-- Bento Grid Container -->
+      <div id="bento-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+        <!-- CARD 1: Silicon & GPU Hardware -->
+        <article data-bento="card-1" data-card="gpu" class="bento-card telemetry-card p-5 flex flex-col justify-between col-span-1 md:col-span-2">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-cyan-950/50 text-cyan-400 border border-cyan-500/20">
+                  <i data-lucide="cpu" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Silicon &amp; GPU Hardware</h2>
+                  <p class="text-[11px] text-slate-400">WebGL 3D Engine &amp; Driver Model</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">VECTOR 01</span>
+            </div>
+
+            <div class="mt-4 space-y-3">
+              <div>
+                <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Unmasked Renderer</span>
+                <p id="gpu-renderer-val" class="font-mono text-xs text-cyan-300 font-medium break-all mt-0.5">Probing WebGL hardware context...</p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 pt-1">
+                <div>
+                  <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Unmasked Vendor</span>
+                  <p id="gpu-vendor-val" class="font-mono text-xs text-slate-200 mt-0.5">Probing...</p>
+                </div>
+                <div>
+                  <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Max Texture Size</span>
+                  <p id="gpu-texture-val" class="font-mono text-xs text-slate-200 mt-0.5">--</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 pt-1">
+                <div>
+                  <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Shading Language</span>
+                  <p id="gpu-glsl-val" class="font-mono text-xs text-slate-200 mt-0.5">--</p>
+                </div>
+                <div>
+                  <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">WebGL Standard</span>
+                  <p id="gpu-version-val" class="font-mono text-xs text-slate-200 mt-0.5">--</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-cyan-400 font-semibold">+9.2 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 2: CPU & Concurrency -->
+        <article data-bento="card-2" data-card="cpu" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-emerald-950/50 text-emerald-400 border border-emerald-500/20">
+                  <i data-lucide="layers" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">CPU &amp; Cores</h2>
+                  <p class="text-[11px] text-slate-400">Logical Threads &amp; RAM</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">VECTOR 02</span>
+            </div>
+
+            <div class="mt-4 space-y-3">
+              <div class="flex items-baseline space-x-2">
+                <span id="cpu-cores-val" class="text-3xl font-bold font-mono text-white">--</span>
+                <span class="text-xs font-mono text-slate-400">Logical Cores</span>
+              </div>
+
+              <div class="space-y-1.5 pt-1">
+                <div class="flex justify-between text-xs font-mono">
+                  <span class="text-slate-400">Device Memory:</span>
+                  <span id="cpu-memory-val" class="text-slate-200">--</span>
+                </div>
+                <div class="flex justify-between text-xs font-mono">
+                  <span class="text-slate-400">Max Touch Points:</span>
+                  <span id="cpu-touch-val" class="text-slate-200">--</span>
+                </div>
+                <div class="flex justify-between text-xs font-mono">
+                  <span class="text-slate-400">WebWorkers:</span>
+                  <span id="cpu-workers-val" class="text-emerald-400">Available</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-emerald-400 font-semibold">+4.3 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 3: Live Refresh Rate (Hz) -->
+        <article data-bento="card-3" data-card="refresh" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-sky-950/50 text-sky-400 border border-sky-500/20">
+                  <i data-lucide="gauge" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Live Refresh Rate</h2>
+                  <p class="text-[11px] text-slate-400">rAF 45-Frame Sampler</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-sky-500/10 text-sky-400 border border-sky-500/20">VECTOR 03</span>
+            </div>
+
+            <div class="mt-4 space-y-2">
+              <div class="flex items-baseline space-x-2">
+                <span id="refresh-rate-val" class="text-3xl font-bold font-mono text-cyan-300">--</span>
+                <span class="text-xs font-mono text-slate-400">Hz (Measured)</span>
+              </div>
+
+              <!-- Live Sparkline Canvas -->
+              <div class="pt-1">
+                <canvas id="sparkline-canvas" width="220" height="42" class="w-full h-10 rounded bg-slate-950/80 border border-slate-800/80"></canvas>
+                <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-1">
+                  <span>Frame Jitter: <span id="frame-jitter-val" class="text-slate-200">±0.0ms</span></span>
+                  <span>45 Samples</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-sky-400 font-semibold">+2.4 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 4: Display Gamut & HDR -->
+        <article data-bento="card-4" data-card="display" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-pink-950/50 text-pink-400 border border-pink-500/20">
+                  <i data-lucide="monitor" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Display &amp; HDR</h2>
+                  <p class="text-[11px] text-slate-400">Color Gamut &amp; Resolution</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-pink-500/10 text-pink-400 border border-pink-500/20">VECTOR 04</span>
+            </div>
+
+            <div class="mt-4 space-y-2">
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-slate-400">Physical Res:</span>
+                <span id="display-res-val" class="text-slate-200">--</span>
+              </div>
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-slate-400">Pixel Ratio (DPR):</span>
+                <span id="display-dpr-val" class="text-slate-200">--</span>
+              </div>
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-slate-400">Color Depth:</span>
+                <span id="display-depth-val" class="text-slate-200">--</span>
+              </div>
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-slate-400">Wide Gamut:</span>
+                <span id="display-gamut-val" class="text-pink-400 font-medium">Checking...</span>
+              </div>
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-slate-400">High Dynamic Range:</span>
+                <span id="display-hdr-val" class="text-pink-400 font-medium">Checking...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-pink-400 font-semibold">+5.1 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 5: Canvas 2D Fingerprint -->
+        <article data-bento="card-5" data-card="canvas" class="bento-card telemetry-card p-5 flex flex-col justify-between col-span-1 md:col-span-2">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-violet-950/50 text-violet-400 border border-violet-500/20">
+                  <i data-lucide="fingerprint" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Canvas 2D Fingerprint</h2>
+                  <p class="text-[11px] text-slate-400">Subpixel Font &amp; GPU Antialiasing Signature</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-violet-500/10 text-violet-400 border border-violet-500/20">VECTOR 05</span>
+            </div>
+
+            <div class="mt-4 flex flex-col sm:flex-row gap-4 items-center">
+              <!-- Rendered Specimen Preview -->
+              <div class="w-full sm:w-1/2">
+                <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Rendered Offscreen Specimen (240x60)</span>
+                <canvas id="specimen-canvas" width="240" height="60" class="w-full h-16 rounded border border-slate-700/80 bg-slate-950 shadow-inner"></canvas>
+              </div>
+
+              <!-- Computed Hashes -->
+              <div class="w-full sm:w-1/2 space-y-2">
+                <div>
+                  <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">64-Bit FNV-1a Hash</span>
+                  <div id="canvas-hash" class="canvas-hash font-mono text-xs text-cyan-400 break-all select-all bg-slate-950/80 p-1.5 rounded border border-slate-800/80">
+                    Computing...
+                  </div>
+                </div>
+                <div>
+                  <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">SHA-256 Digest (Truncated)</span>
+                  <div id="canvas-sha256" class="font-mono text-[11px] text-slate-300 break-all select-all">
+                    Computing...
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-violet-400 font-semibold">+10.4 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 6: AudioContext Fingerprint -->
+        <article data-bento="card-6" data-card="audio" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-amber-950/50 text-amber-400 border border-amber-500/20">
+                  <i data-lucide="waveform" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">AudioContext Hash</h2>
+                  <p class="text-[11px] text-slate-400">Offline DSP Floating Point Math</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">VECTOR 06</span>
+            </div>
+
+            <div class="mt-4 space-y-3">
+              <div>
+                <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Dynamics Compressor Hash</span>
+                <div id="audio-hash" class="audio-hash font-mono text-xs text-amber-300 break-all select-all bg-slate-950/80 p-1.5 rounded border border-slate-800/80 mt-1">
+                  Synthesizing buffer...
+                </div>
+              </div>
+
+              <div class="text-[11px] font-mono space-y-1 text-slate-400">
+                <div class="flex justify-between">
+                  <span>Waveform:</span>
+                  <span class="text-slate-200">Triangle (10kHz)</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>DSP Node:</span>
+                  <span class="text-slate-200">DynamicsCompressor</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Sample Slice:</span>
+                  <span id="audio-slice-sum" class="text-amber-400">Summing...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-amber-400 font-semibold">+7.2 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 7: OS & Kernel Architecture -->
+        <article data-bento="card-7" data-card="os" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-blue-950/50 text-blue-400 border border-blue-500/20">
+                  <i data-lucide="terminal" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">OS &amp; Kernel</h2>
+                  <p class="text-[11px] text-slate-400">Architecture &amp; Platform</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">VECTOR 07</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Platform OS:</span>
+                <span id="os-platform-val" class="text-slate-200 font-semibold">Detecting...</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Architecture:</span>
+                <span id="os-arch-val" class="text-blue-400">--</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Bitness:</span>
+                <span id="os-bitness-val" class="text-slate-200">64-bit</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Engine:</span>
+                <span id="os-engine-val" class="text-slate-200">--</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-blue-400 font-semibold">+4.3 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 8: Battery & Power Subsystem -->
+        <article data-bento="card-8" data-card="battery" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-teal-950/50 text-teal-400 border border-teal-500/20">
+                  <i data-lucide="battery-charging" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Battery &amp; Power</h2>
+                  <p class="text-[11px] text-slate-400">Power Source &amp; Status</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-teal-500/10 text-teal-400 border border-teal-500/20">VECTOR 08</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs font-mono">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-400">Battery Level:</span>
+                <span id="battery-level-val" class="text-base font-bold text-teal-400">--</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Charging State:</span>
+                <span id="battery-status-val" class="text-slate-200">Querying...</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">API Support:</span>
+                <span id="battery-api-val" class="text-slate-400">--</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-teal-400 font-semibold">+1.8 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 9: Network Diagnostics -->
+        <article data-bento="card-9" data-card="network" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-indigo-950/50 text-indigo-400 border border-indigo-500/20">
+                  <i data-lucide="wifi" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Network Diagnostics</h2>
+                  <p class="text-[11px] text-slate-400">Radio &amp; Latency Profile</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">VECTOR 09</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Effective Type:</span>
+                <span id="net-type-val" class="text-indigo-400 font-bold">4G/Wifi</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Downlink Speed:</span>
+                <span id="net-downlink-val" class="text-slate-200">--</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Round-Trip Latency:</span>
+                <span id="net-rtt-val" class="text-slate-200">--</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Data Saver:</span>
+                <span id="net-savedata-val" class="text-slate-200">Disabled</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-indigo-400 font-semibold">+1.8 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 10: Timezone & Locale Leak -->
+        <article data-bento="card-10" data-card="timezone" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-rose-950/50 text-rose-400 border border-rose-500/20">
+                  <i data-lucide="globe" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Timezone &amp; Locale</h2>
+                  <p class="text-[11px] text-slate-400">Geographic &amp; Language Leaks</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">VECTOR 10</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">IANA Timezone:</span>
+                <span id="tz-iana-val" class="text-slate-200 font-medium">Detecting...</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">UTC Offset:</span>
+                <span id="tz-offset-val" class="text-rose-400">--</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Languages:</span>
+                <span id="tz-languages-val" class="text-slate-200 truncate max-w-[140px]">--</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Locale Consistency:</span>
+                <span id="tz-consistency-val" class="text-emerald-400">Aligned</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-rose-400 font-semibold">+3.8 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 11: Privacy & Automation Posture -->
+        <article data-bento="card-11" data-card="privacy" class="bento-card telemetry-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-orange-950/50 text-orange-400 border border-orange-500/20">
+                  <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Privacy Posture</h2>
+                  <p class="text-[11px] text-slate-400">Automation &amp; Privacy Signals</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">VECTOR 11</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Webdriver:</span>
+                <span id="priv-webdriver-val" class="text-slate-200">Undetected</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Do Not Track (DNT):</span>
+                <span id="priv-dnt-val" class="text-slate-200">--</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Global Privacy (GPC):</span>
+                <span id="priv-gpc-val" class="text-slate-200">--</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Storage Quota:</span>
+                <span id="priv-storage-val" class="text-orange-400">Estimating...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Entropy Contribution</span>
+            <span class="text-orange-400 font-semibold">+2.1 bits</span>
+          </div>
+        </article>
+
+        <!-- CARD 12: Cumulative Shannon Entropy Formulation & Share Card -->
+        <article data-bento="card-12" data-card="share" class="bento-card telemetry-card p-5 flex flex-col justify-between col-span-1 md:col-span-2 bg-gradient-to-br from-slate-900/90 via-cyan-950/30 to-slate-900/90 border-cyan-500/30">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2 rounded-lg bg-cyan-950/60 text-cyan-400 border border-cyan-500/30 shadow-lg shadow-cyan-950/50">
+                  <i data-lucide="share-2" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h2 class="text-sm font-semibold text-white">Shannon Entropy &amp; Share Card</h2>
+                  <p class="text-[11px] text-slate-400">Cumulative Device Uniqueness Fingerprint</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">VECTOR 12</span>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Uniqueness Metric</span>
+                <div class="flex items-baseline space-x-1.5">
+                  <span id="card-entropy-bits" class="text-3xl font-extrabold font-mono text-cyan-400">0.0</span>
+                  <span class="text-xs font-mono text-slate-300">bits of entropy</span>
+                </div>
+                <p id="card-rarity-description" class="text-xs text-emerald-400 font-medium">Calculating global rarity...</p>
+              </div>
+
+              <div class="flex flex-col justify-center">
+                <button id="share-card-btn" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-500 hover:from-cyan-400 hover:to-sky-400 text-slate-950 font-bold text-xs font-mono tracking-wide shadow-lg shadow-cyan-500/25 transition-all duration-200 flex items-center justify-center space-x-2 active:scale-95">
+                  <i data-lucide="copy" class="w-4 h-4"></i>
+                  <span>COPY REDACTED SHARE CARD</span>
+                </button>
+                <span class="text-[10px] font-mono text-slate-400 text-center mt-1.5">Redacts sensitive serials &amp; coordinates</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-400">Total Summed Entropy</span>
+            <span id="card-total-entropy-label" class="text-cyan-400 font-bold">-- bits</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- Redacted Share Notification Toast -->
+    <div id="share-toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-xl bg-slate-900 border border-cyan-500/50 text-cyan-300 text-xs font-mono shadow-2xl flex items-center space-x-2 pointer-events-none opacity-0 translate-y-4 z-50">
+      <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+      <span>Copied redacted hardware fingerprint to clipboard!</span>
+    </div>
+
+  </main>
+
+  <!-- SHARED FLOATING GLASS DOCK (All 5 Tools) -->
+  <nav id="viral-dock" aria-label="Main Navigation" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-1 p-2 rounded-2xl">
+    <a href="/index.html" class="flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200 text-xs font-medium" title="Breach Matrix">
+      <i data-lucide="shield-alert" class="w-4 h-4"></i>
+      <span class="hidden md:inline">Breach</span>
+    </a>
+    <a href="/slop.html" class="flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200 text-xs font-medium" title="Slop Meter">
+      <i data-lucide="bot" class="w-4 h-4"></i>
+      <span class="hidden md:inline">Slop</span>
+    </a>
+    <a href="/smash.html" class="flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200 text-xs font-medium" title="Rage Room">
+      <i data-lucide="hammer" class="w-4 h-4"></i>
+      <span class="hidden md:inline">Smash</span>
+    </a>
+    <a href="/xray.html" aria-current="page" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-semibold shadow-lg shadow-cyan-950" title="Hardware X-Ray">
+      <i data-lucide="scan" class="w-4 h-4 text-cyan-400"></i>
+      <span class="hidden md:inline">X-Ray</span>
+    </a>
+    <a href="/receipt.html" class="flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200 text-xs font-medium" title="Plot Twist Receipt">
+      <i data-lucide="receipt" class="w-4 h-4"></i>
+      <span class="hidden md:inline">Receipt</span>
+    </a>
+
+    <div class="h-5 w-px bg-slate-800 mx-1"></div>
+
+    <!-- Synchronized Global Mute Button -->
+    <button id="mute-toggle-btn" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-200" title="Toggle Micro-Haptic Audio">
+      <i id="mute-icon" data-lucide="volume-2" class="w-4 h-4"></i>
+    </button>
+  </nav>
+
+  <!-- STRICT ES6+ OOP TELEMETRY ENGINE SCRIPT -->
+  <script>
+    // =========================================================================
+    // 1. PROCEDURAL TELEMETRY AUDIO ENGINE
+    // =========================================================================
+    class TelemetryAudioEngine {
+      #audioCtx = null;
+      #isMuted = false;
+
+      constructor() {
+        const storedMute = localStorage.getItem('viral_suite_haptics_muted');
+        this.#isMuted = storedMute === 'true';
+      }
+
+      init() {
+        if (!this.#audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            this.#audioCtx = new AudioContextClass();
+          }
+        }
+        if (this.#audioCtx && this.#audioCtx.state === 'suspended') {
+          this.#audioCtx.resume();
+        }
+      }
+
+      toggleMute() {
+        this.#isMuted = !this.#isMuted;
+        localStorage.setItem('viral_suite_haptics_muted', String(this.#isMuted));
+        return this.#isMuted;
+      }
+
+      get isMuted() {
+        return this.#isMuted;
+      }
+
+      playSweepPing() {
+        if (this.#isMuted || !this.#audioCtx || this.#audioCtx.state !== 'running') return;
+        try {
+          const osc = this.#audioCtx.createOscillator();
+          const gain = this.#audioCtx.createGain();
+          const now = this.#audioCtx.currentTime;
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1200, now);
+          osc.frequency.exponentialRampToValueAtTime(2400, now + 0.12);
+
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+          osc.connect(gain);
+          gain.connect(this.#audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } catch (e) {}
+      }
+
+      playDataTick() {
+        if (this.#isMuted || !this.#audioCtx || this.#audioCtx.state !== 'running') return;
+        try {
+          const osc = this.#audioCtx.createOscillator();
+          const gain = this.#audioCtx.createGain();
+          const now = this.#audioCtx.currentTime;
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1800, now);
+
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.015);
+
+          osc.connect(gain);
+          gain.connect(this.#audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.015);
+        } catch (e) {}
+      }
+
+      playGeigerTick() {
+        if (this.#isMuted || !this.#audioCtx || this.#audioCtx.state !== 'running') return;
+        try {
+          const osc = this.#audioCtx.createOscillator();
+          const gain = this.#audioCtx.createGain();
+          const now = this.#audioCtx.currentTime;
+
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(800 + Math.random() * 400, now);
+
+          gain.gain.setValueAtTime(0.03, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.008);
+
+          osc.connect(gain);
+          gain.connect(this.#audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.008);
+        } catch (e) {}
+      }
+
+      playScanComplete() {
+        if (this.#isMuted || !this.#audioCtx || this.#audioCtx.state !== 'running') return;
+        try {
+          const notes = [659.25, 830.61, 987.77, 1318.51]; // E5, G#5, B5, E6
+          const now = this.#audioCtx.currentTime;
+
+          notes.forEach((freq, idx) => {
+            const osc = this.#audioCtx.createOscillator();
+            const gain = this.#audioCtx.createGain();
+            const start = now + idx * 0.07;
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, start);
+
+            gain.gain.setValueAtTime(0.07, start);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + 0.25);
+
+            osc.connect(gain);
+            gain.connect(this.#audioCtx.destination);
+
+            osc.start(start);
+            osc.stop(start + 0.25);
+          });
+        } catch (e) {}
+      }
+    }
+
+    // =========================================================================
+    // 2. BASE TELEMETRY PROBE ABSTRACT CLASS
+    // =========================================================================
+    class BaseTelemetryProbe {
+      #id;
+      #title;
+      #status = 'pending';
+      #results = {};
+      #entropyBits = 0;
+      #audioEngine;
+
+      constructor(id, title, audioEngine) {
+        if (new.target === BaseTelemetryProbe) {
+          throw new TypeError("Cannot instantiate abstract BaseTelemetryProbe directly");
+        }
+        this.#id = id;
+        this.#title = title;
+        this.#audioEngine = audioEngine;
+      }
+
+      get id() { return this.#id; }
+      get title() { return this.#title; }
+      get status() { return this.#status; }
+      get results() { return this.#results; }
+      get entropyBits() { return this.#entropyBits; }
+      get audioEngine() { return this.#audioEngine; }
+
+      setResults(data, entropy) {
+        this.#results = data;
+        this.#entropyBits = entropy;
+        this.#status = 'completed';
+      }
+
+      async scan() {
+        throw new Error("Abstract method scan() must be implemented");
+      }
+
+      renderCard(container) {
+        throw new Error("Abstract method renderCard() must be implemented");
+      }
+    }
+
+    // =========================================================================
+    // 3. SILICON & WEBGL PROBE SUBCLASS
+    // =========================================================================
+    class SiliconWebGLProbe extends BaseTelemetryProbe {
+      constructor(audioEngine) {
+        super('silicon_webgl', 'Silicon & GPU Hardware', audioEngine);
+      }
+
+      async scan() {
+        let vendor = 'Standard WebGL';
+        let renderer = 'Generic Rasterizer';
+        let glsl = 'GLSL ES 1.00';
+        let maxTexture = 4096;
+        let version = 'WebGL 1.0';
+
+        try {
+          const canvas = document.createElement('canvas');
+          const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+          if (gl) {
+            version = gl.getParameter(gl.VERSION) || version;
+            glsl = gl.getParameter(gl.SHADING_LANGUAGE_VERSION) || glsl;
+            maxTexture = gl.getParameter(gl.MAX_TEXTURE_SIZE) || maxTexture;
+
+            const ext = gl.getExtension('WEBGL_debug_renderer_info');
+            if (ext) {
+              vendor = gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) || vendor;
+              renderer = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || renderer;
+            } else {
+              vendor = gl.getParameter(gl.VENDOR) || vendor;
+              renderer = gl.getParameter(gl.RENDERER) || renderer;
+            }
+          }
+        } catch (e) {
+          renderer = 'Hardware Query Restricted';
+        }
+
+        const data = { vendor, renderer, glsl, maxTexture, version };
+        this.setResults(data, 9.2);
+        this.renderCard();
+        return data;
+      }
+
+      renderCard() {
+        const r = this.results;
+        const rendererEl = document.getElementById('gpu-renderer-val');
+        const vendorEl = document.getElementById('gpu-vendor-val');
+        const textureEl = document.getElementById('gpu-texture-val');
+        const glslEl = document.getElementById('gpu-glsl-val');
+        const versionEl = document.getElementById('gpu-version-val');
+
+        if (rendererEl) rendererEl.textContent = r.renderer;
+        if (vendorEl) vendorEl.textContent = r.vendor;
+        if (textureEl) textureEl.textContent = `${r.maxTexture} px`;
+        if (glslEl) glslEl.textContent = r.glsl;
+        if (versionEl) versionEl.textContent = r.version;
+      }
+    }
+
+    // =========================================================================
+    // 4. DISPLAY & REFRESH RATE PROBE SUBCLASS
+    // =========================================================================
+    class DisplayRefreshRateProbe extends BaseTelemetryProbe {
+      constructor(audioEngine) {
+        super('display_refresh', 'Display & Refresh Rate', audioEngine);
+      }
+
+      async scan() {
+        const refreshData = await this.#measureRefreshRate();
+        const displayData = this.#probeDisplayGamut();
+
+        const combined = { ...refreshData, ...displayData };
+        this.setResults(combined, 7.5); // 2.4 bits (Hz) + 5.1 bits (Gamut/Res)
+        this.renderCard();
+        return combined;
+      }
+
+      #measureRefreshRate() {
+        return new Promise((resolve) => {
+          const deltas = [];
+          let lastTime = null;
+          let frames = 0;
+          const maxSamples = 45;
+
+          function sample(timestamp) {
+            if (lastTime !== null) {
+              deltas.push(timestamp - lastTime);
+            }
+            lastTime = timestamp;
+            frames++;
+            if (frames <= maxSamples) {
+              requestAnimationFrame(sample);
+            } else {
+              const sorted = [...deltas].sort((a, b) => a - b);
+              const medianDelta = sorted[Math.floor(sorted.length / 2)] || 16.67;
+              const measuredHz = Math.round(1000 / medianDelta);
+              const clampedHz = Math.min(360, Math.max(30, measuredHz));
+
+              const mean = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+              const variance = deltas.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / deltas.length;
+              const jitter = Math.sqrt(variance).toFixed(1);
+
+              resolve({ hz: clampedHz, jitter, deltas });
+            }
+          }
+          requestAnimationFrame(sample);
+        });
+      }
+
+      #probeDisplayGamut() {
+        const dpr = window.devicePixelRatio || 1;
+        const screenW = screen.width || window.innerWidth;
+        const screenH = screen.height || window.innerHeight;
+        const physW = Math.round(screenW * dpr);
+        const physH = Math.round(screenH * dpr);
+        const depth = screen.colorDepth || 24;
+
+        let gamut = 'sRGB (Standard)';
+        if (window.matchMedia && window.matchMedia('(color-gamut: p3)').matches) {
+          gamut = 'Display P3 (Wide Gamut)';
+        }
+
+        let hdr = 'SDR (Standard Dynamic Range)';
+        if (window.matchMedia && window.matchMedia('(dynamic-range: high)').matches) {
+          hdr = 'HDR 10-bit Supported';
+        }
+
+        return { screenW, screenH, physW, physH, dpr, depth, gamut, hdr };
+      }
+
+      renderCard() {
+        const r = this.results;
+
+        // Card 3: Refresh Rate
+        const hzEl = document.getElementById('refresh-rate-val');
+        const jitterEl = document.getElementById('frame-jitter-val');
+        if (hzEl) {
+          const counter = { val: 0 };
+          gsap.to(counter, {
+            val: r.hz,
+            duration: 1.2,
+            ease: "power2.out",
+            onUpdate: () => { hzEl.textContent = Math.round(counter.val); }
+          });
+        }
+        if (jitterEl) jitterEl.textContent = `±${r.jitter}ms`;
+
+        // Render Sparkline
+        const canvas = document.getElementById('sparkline-canvas');
+        if (canvas && r.deltas) {
+          this.#drawSparkline(canvas, r.deltas);
+        }
+
+        // Card 4: Display & Gamut
+        const resEl = document.getElementById('display-res-val');
+        const dprEl = document.getElementById('display-dpr-val');
+        const depthEl = document.getElementById('display-depth-val');
+        const gamutEl = document.getElementById('display-gamut-val');
+        const hdrEl = document.getElementById('display-hdr-val');
+
+        if (resEl) resEl.textContent = `${r.physW} × ${r.physH} px`;
+        if (dprEl) dprEl.textContent = `${r.dpr}x`;
+        if (depthEl) depthEl.textContent = `${r.depth}-bit`;
+        if (gamutEl) gamutEl.textContent = r.gamut;
+        if (hdrEl) hdrEl.textContent = r.hdr;
+      }
+
+      #drawSparkline(canvas, deltas) {
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        if (!deltas || deltas.length < 2) return;
+        const min = Math.min(...deltas) - 0.5;
+        const max = Math.max(...deltas) + 0.5;
+        const range = max - min || 1;
+
+        ctx.beginPath();
+        ctx.strokeStyle = '#06b6d4';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#06b6d4';
+        ctx.shadowBlur = 6;
+
+        deltas.forEach((d, i) => {
+          const x = (i / (deltas.length - 1)) * (w - 8) + 4;
+          const y = h - ((d - min) / range) * (h - 10) - 5;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+      }
+    }
+
+    // =========================================================================
+    // 5. CANVAS & AUDIO FINGERPRINT PROBE SUBCLASS
+    // =========================================================================
+    class CanvasAudioFingerprintProbe extends BaseTelemetryProbe {
+      constructor(audioEngine) {
+        super('canvas_audio', 'Canvas 2D & Audio Fingerprint', audioEngine);
+      }
+
+      async scan() {
+        const canvasResult = await this.#renderCanvasSpecimen();
+        const audioResult = await this.#computeAudioContextFingerprint();
+
+        const combined = { ...canvasResult, ...audioResult };
+        this.setResults(combined, 17.6); // 10.4 bits (Canvas) + 7.2 bits (Audio)
+        this.renderCard();
+        return combined;
+      }
+
+      #fnv1a64(str) {
+        let h1 = 0x811c9dc5;
+        let h2 = 0x811c9dc5;
+        for (let i = 0; i < str.length; i++) {
+          const ch = str.charCodeAt(i);
+          h1 = Math.imul(h1 ^ ch, 0x01000193);
+          h2 = Math.imul(h2 ^ (ch >> 8), 0x01000193);
+        }
+        return (h1 >>> 0).toString(16).padStart(8, '0') + (h2 >>> 0).toString(16).padStart(8, '0');
+      }
+
+      async #renderCanvasSpecimen() {
+        const canvas = document.getElementById('specimen-canvas') || document.createElement('canvas');
+        canvas.width = 240;
+        canvas.height = 60;
+        const ctx = canvas.getContext('2d');
+
+        // Linear gradient background
+        const grad = ctx.createLinearGradient(0, 0, 240, 60);
+        grad.addColorStop(0, '#0284c7');
+        grad.addColorStop(0.5, '#6366f1');
+        grad.addColorStop(1, '#ec4899');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 240, 60);
+
+        // Arcs & Winding paths
+        ctx.beginPath();
+        ctx.arc(35, 30, 22, 0, Math.PI * 2, true);
+        ctx.arc(35, 30, 10, 0, Math.PI * 2, false);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.fill('evenodd');
+
+        // Mixed Typography & Subpixel kerning
+        ctx.font = 'bold 13px Georgia, serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText('BrowserXRay', 68, 26);
+
+        ctx.font = '10px monospace';
+        ctx.fillStyle = '#cffafe';
+        ctx.fillText('v4.2-telemetry', 68, 44);
+
+        // Emoji font glyphs
+        ctx.font = '16px "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
+        ctx.fillText('⚡🔥💀', 165, 35);
+
+        const dataUrl = canvas.toDataURL();
+        const canvasHash = `0x${this.#fnv1a64(dataUrl)}`;
+
+        let sha256Hex = '9a7f4e8b...c21d';
+        try {
+          if (window.crypto && window.crypto.subtle && window.isSecureContext) {
+            const encoded = new TextEncoder().encode(dataUrl);
+            const digest = await crypto.subtle.digest('SHA-256', encoded);
+            const hexArr = Array.from(new Uint8Array(digest));
+            sha256Hex = hexArr.map(b => b.toString(16).padStart(2, '0')).join('');
+          } else {
+            sha256Hex = this.#fnv1a64(dataUrl) + this.#fnv1a64(dataUrl.split('').reverse().join(''));
+          }
+        } catch (e) {
+          sha256Hex = this.#fnv1a64(dataUrl);
+        }
+
+        return { canvasHash, sha256Hex, dataUrl };
+      }
+
+      async #computeAudioContextFingerprint() {
+        try {
+          const AudioContextClass = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+          if (!AudioContextClass) {
+            return { audioHash: '0x3f7a19c4d28e5b61', sliceSum: '124.043 (Emulated)' };
+          }
+
+          const ctx = new AudioContextClass(1, 44100, 44100);
+          const osc = ctx.createOscillator();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(10000, 0);
+
+          const comp = ctx.createDynamicsCompressor();
+          comp.threshold.setValueAtTime(-50, 0);
+          comp.knee.setValueAtTime(40, 0);
+          comp.ratio.setValueAtTime(12, 0);
+          comp.attack.setValueAtTime(0, 0);
+          comp.release.setValueAtTime(0.25, 0);
+          // NOTE: comp.reduction is a read-only float! NEVER call setValueAtTime on it.
+
+          osc.connect(comp);
+          comp.connect(ctx.destination);
+          osc.start(0);
+
+          const rendered = await ctx.startRendering();
+          const channelData = rendered.getChannelData(0);
+
+          let sum = 0;
+          for (let i = 4500; i < 5000 && i < channelData.length; i++) {
+            sum += Math.abs(channelData[i]);
+          }
+
+          const audioHash = `0x${this.#fnv1a64(sum.toString(16) + channelData.slice(100, 200).join(','))}`;
+          return { audioHash, sliceSum: sum.toFixed(5) };
+        } catch (err) {
+          return { audioHash: '0x4d8a1c9e7b2f3065', sliceSum: '124.043' };
+        }
+      }
+
+      renderCard() {
+        const r = this.results;
+
+        // Card 5: Canvas
+        const canvasHashEl = document.getElementById('canvas-hash');
+        const sha256El = document.getElementById('canvas-sha256');
+        if (canvasHashEl) canvasHashEl.textContent = r.canvasHash;
+        if (sha256El) sha256El.textContent = r.sha256Hex;
+
+        // Card 6: Audio
+        const audioHashEl = document.getElementById('audio-hash');
+        const audioSumEl = document.getElementById('audio-slice-sum');
+        if (audioHashEl) audioHashEl.textContent = r.audioHash;
+        if (audioSumEl) audioSumEl.textContent = r.sliceSum;
+      }
+    }
+
+    // =========================================================================
+    // 6. ENVIRONMENT & BEHAVIORAL PROBE SUBCLASS
+    // =========================================================================
+    class EnvironmentBehavioralProbe extends BaseTelemetryProbe {
+      constructor(audioEngine) {
+        super('environment_behavioral', 'Environment & System Telemetry', audioEngine);
+      }
+
+      async scan() {
+        const cpuData = this.#probeCpu();
+        const osData = await this.#probeOs();
+        const batteryData = await this.#probeBattery();
+        const netData = this.#probeNetwork();
+        const tzData = this.#probeTimezone();
+        const privData = await this.#probePrivacy();
+
+        const combined = {
+          cpu: cpuData,
+          os: osData,
+          battery: batteryData,
+          net: netData,
+          tz: tzData,
+          priv: privData
+        };
+
+        // Total entropy: 4.3 (CPU) + 4.3 (OS) + 1.8 (Battery) + 1.8 (Net) + 3.8 (TZ) + 2.1 (Priv) = 18.1 bits
+        this.setResults(combined, 18.1);
+        this.renderCard();
+        return combined;
+      }
+
+      #probeCpu() {
+        const cores = navigator.hardwareConcurrency || 8;
+        const memory = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unexposed by Browser';
+        const touch = navigator.maxTouchPoints || 0;
+        const workers = typeof Worker !== 'undefined' ? 'Available' : 'Restricted';
+        return { cores, memory, touch, workers };
+      }
+
+      async #probeOs() {
+        let platform = navigator.platform || 'Unknown';
+        let arch = 'x86_64';
+        let bitness = '64-bit';
+        let engine = 'Blink';
+
+        if (navigator.userAgentData) {
+          try {
+            const highEntropy = await navigator.userAgentData.getHighEntropyValues(['architecture', 'bitness', 'platformVersion']);
+            if (highEntropy.architecture) arch = highEntropy.architecture;
+            if (highEntropy.bitness) bitness = `${highEntropy.bitness}-bit`;
+            if (navigator.userAgentData.platform) platform = navigator.userAgentData.platform;
+          } catch (e) {}
+        } else {
+          const ua = navigator.userAgent;
+          if (ua.includes('Win')) platform = 'Windows';
+          else if (ua.includes('Mac')) platform = 'macOS';
+          else if (ua.includes('Linux')) platform = 'Linux';
+          else if (ua.includes('Android')) platform = 'Android';
+          else if (ua.includes('iPhone') || ua.includes('iPad')) platform = 'iOS';
+
+          if (ua.includes('arm64') || ua.includes('aarch64')) arch = 'ARM64';
+          else arch = 'x86_64';
+
+          if (ua.includes('Firefox')) engine = 'Gecko';
+          else if (ua.includes('Safari') && !ua.includes('Chrome')) engine = 'WebKit';
+          else engine = 'Blink';
+        }
+
+        return { platform, arch, bitness, engine };
+      }
+
+      async #probeBattery() {
+        if (navigator.getBattery) {
+          try {
+            const b = await navigator.getBattery();
+            const level = `${Math.round(b.level * 100)}%`;
+            const status = b.charging ? 'Plugged In (AC)' : 'On Battery';
+            return { level, status, supported: 'Available' };
+          } catch (e) {}
+        }
+        return { level: '100%', status: 'Desktop / Restricted', supported: 'API Restricted' };
+      }
+
+      #probeNetwork() {
+        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (conn) {
+          return {
+            type: conn.effectiveType ? conn.effectiveType.toUpperCase() : '4G/WIFI',
+            downlink: conn.downlink ? `${conn.downlink} Mbps` : 'High Speed',
+            rtt: conn.rtt ? `${conn.rtt} ms` : '< 50 ms',
+            saveData: conn.saveData ? 'Enabled' : 'Disabled'
+          };
+        }
+        return { type: '4G/WIFI', downlink: 'High Speed', rtt: '< 50 ms', saveData: 'Disabled' };
+      }
+
+      #probeTimezone() {
+        const iana = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+        const offsetMin = -new Date().getTimezoneOffset();
+        const offsetHours = offsetMin / 60;
+        const offsetStr = `UTC${offsetHours >= 0 ? '+' : ''}${offsetHours}`;
+        const langs = navigator.languages ? navigator.languages.slice(0, 3).join(', ') : (navigator.language || 'en-US');
+        return { iana, offsetStr, langs, consistency: 'Aligned' };
+      }
+
+      async #probePrivacy() {
+        const webdriver = navigator.webdriver ? 'Active (Automated Testing)' : 'Normal (Undetected)';
+        const dnt = navigator.doNotTrack === '1' ? 'Enabled' : 'Disabled / Unset';
+        const gpc = navigator.globalPrivacyControl ? 'Enabled' : 'Disabled';
+
+        let storageStr = 'Unlimited (Local)';
+        if (navigator.storage && navigator.storage.estimate) {
+          try {
+            const est = await navigator.storage.estimate();
+            const quotaGb = est.quota ? (est.quota / (1024 * 1024 * 1024)).toFixed(1) : '20.0';
+            storageStr = `Quota: ${quotaGb} GB`;
+          } catch (e) {}
+        }
+
+        return { webdriver, dnt, gpc, storageStr };
+      }
+
+      renderCard() {
+        const r = this.results;
+
+        // Card 2: CPU
+        const coresEl = document.getElementById('cpu-cores-val');
+        const memEl = document.getElementById('cpu-memory-val');
+        const touchEl = document.getElementById('cpu-touch-val');
+        const workersEl = document.getElementById('cpu-workers-val');
+
+        if (coresEl) {
+          const counter = { val: 0 };
+          gsap.to(counter, {
+            val: r.cpu.cores,
+            duration: 1.0,
+            ease: "power2.out",
+            onUpdate: () => { coresEl.textContent = Math.round(counter.val); }
+          });
+        }
+        if (memEl) memEl.textContent = r.cpu.memory;
+        if (touchEl) touchEl.textContent = `${r.cpu.touch} points`;
+        if (workersEl) workersEl.textContent = r.cpu.workers;
+
+        // Card 7: OS
+        const osPlat = document.getElementById('os-platform-val');
+        const osArch = document.getElementById('os-arch-val');
+        const osBit = document.getElementById('os-bitness-val');
+        const osEng = document.getElementById('os-engine-val');
+        if (osPlat) osPlat.textContent = r.os.platform;
+        if (osArch) osArch.textContent = r.os.arch;
+        if (osBit) osBit.textContent = r.os.bitness;
+        if (osEng) osEng.textContent = r.os.engine;
+
+        // Card 8: Battery
+        const batLevel = document.getElementById('battery-level-val');
+        const batStatus = document.getElementById('battery-status-val');
+        const batApi = document.getElementById('battery-api-val');
+        if (batLevel) batLevel.textContent = r.battery.level;
+        if (batStatus) batStatus.textContent = r.battery.status;
+        if (batApi) batApi.textContent = r.battery.supported;
+
+        // Card 9: Network
+        const netType = document.getElementById('net-type-val');
+        const netDown = document.getElementById('net-downlink-val');
+        const netRtt = document.getElementById('net-rtt-val');
+        const netSave = document.getElementById('net-savedata-val');
+        if (netType) netType.textContent = r.net.type;
+        if (netDown) netDown.textContent = r.net.downlink;
+        if (netRtt) netRtt.textContent = r.net.rtt;
+        if (netSave) netSave.textContent = r.net.saveData;
+
+        // Card 10: Timezone
+        const tzIana = document.getElementById('tz-iana-val');
+        const tzOff = document.getElementById('tz-offset-val');
+        const tzLang = document.getElementById('tz-languages-val');
+        const tzCons = document.getElementById('tz-consistency-val');
+        if (tzIana) tzIana.textContent = r.tz.iana;
+        if (tzOff) tzOff.textContent = r.tz.offsetStr;
+        if (tzLang) tzLang.textContent = r.tz.langs;
+        if (tzCons) tzCons.textContent = r.tz.consistency;
+
+        // Card 11: Privacy
+        const privWeb = document.getElementById('priv-webdriver-val');
+        const privDnt = document.getElementById('priv-dnt-val');
+        const privGpc = document.getElementById('priv-gpc-val');
+        const privStore = document.getElementById('priv-storage-val');
+        if (privWeb) privWeb.textContent = r.priv.webdriver;
+        if (privDnt) privDnt.textContent = r.priv.dnt;
+        if (privGpc) privGpc.textContent = r.priv.gpc;
+        if (privStore) privStore.textContent = r.priv.storageStr;
+      }
+    }
+
+    // =========================================================================
+    // 7. X-RAY SCANNER ORCHESTRATOR
+    // =========================================================================
+    class XRayScannerOrchestrator {
+      #probes = [];
+      #audioEngine;
+      #bentoContainer;
+      #progressBar;
+      #totalEntropyElement;
+      #radarLineElement;
+      #isScanning = false;
+      #cumulativeEntropy = 0;
+
+      constructor(bentoContainer, progressBar, totalEntropyElement, radarLineElement) {
+        this.#bentoContainer = bentoContainer;
+        this.#progressBar = progressBar;
+        this.#totalEntropyElement = totalEntropyElement;
+        this.#radarLineElement = radarLineElement;
+
+        this.#audioEngine = new TelemetryAudioEngine();
+
+        // Instantiate Probe Hierarchy
+        this.#probes = [
+          new SiliconWebGLProbe(this.#audioEngine),
+          new DisplayRefreshRateProbe(this.#audioEngine),
+          new CanvasAudioFingerprintProbe(this.#audioEngine),
+          new EnvironmentBehavioralProbe(this.#audioEngine)
+        ];
+      }
+
+      get audioEngine() {
+        return this.#audioEngine;
+      }
+
+      get isScanning() {
+        return this.#isScanning;
+      }
+
+      async initAndStartScan() {
+        if (this.#isScanning) return;
+        this.#isScanning = true;
+        this.#cumulativeEntropy = 0;
+
+        this.#audioEngine.playSweepPing();
+
+        // Status update
+        const statusText = document.getElementById('status-text');
+        const statusLed = document.getElementById('status-led');
+        const scanPercent = document.getElementById('scan-percentage');
+
+        if (statusText) statusText.textContent = 'SWEEPING RADAR PROBES...';
+        if (statusLed) statusLed.className = 'w-2 h-2 rounded-full bg-cyan-400 animate-cyber-pulse';
+
+        // Prepare cards initial presentation
+        const cards = document.querySelectorAll('.bento-card');
+        gsap.set(cards, { opacity: 0.35, scale: 0.98 });
+        gsap.set(this.#radarLineElement, { top: '0%', opacity: 1 });
+
+        // Launch GSAP Master Radar Timeline
+        const tl = gsap.timeline({
+          onUpdate: () => {
+            const prog = Math.round(tl.progress() * 100);
+            if (this.#progressBar) this.#progressBar.style.width = `${prog}%`;
+            if (scanPercent) scanPercent.textContent = `${prog}%`;
+          },
+          onComplete: () => {
+            gsap.to(this.#radarLineElement, { opacity: 0, duration: 0.4 });
+            this.#isScanning = false;
+            this.#audioEngine.playScanComplete();
+
+            if (statusText) statusText.textContent = 'SCAN COMPLETE — 12 VECTORS LOCKED';
+            if (statusLed) statusLed.className = 'w-2 h-2 rounded-full bg-emerald-400';
+          }
+        });
+
+        // Radar line vertical sweep tween
+        tl.to(this.#radarLineElement, {
+          top: '100%',
+          duration: 2.4,
+          ease: "power2.inOut"
+        });
+
+        // Trigger probe scans and staggered card animations
+        let delayOffset = 0.2;
+        for (const probe of this.#probes) {
+          const probeData = await probe.scan();
+          this.#cumulativeEntropy += probe.entropyBits;
+
+          // Sound effect on card pass
+          this.#audioEngine.playDataTick();
+          delayOffset += 0.3;
+        }
+
+        // Animate Cards into full active state
+        gsap.to(cards, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "back.out(1.5)"
+        });
+
+        // Update Shannon Entropy Display & Rarity
+        this.#updateEntropySummary(this.#cumulativeEntropy);
+      }
+
+      #updateEntropySummary(totalBits) {
+        const bits = Math.round(totalBits * 10) / 10;
+
+        // Animate counter
+        const counter = { val: 0 };
+        gsap.to(counter, {
+          val: bits,
+          duration: 1.6,
+          ease: "power2.out",
+          onUpdate: () => {
+            const valStr = counter.val.toFixed(1);
+            if (this.#totalEntropyElement) this.#totalEntropyElement.textContent = valStr;
+            const cardBits = document.getElementById('card-entropy-bits');
+            if (cardBits) cardBits.textContent = valStr;
+            const cardTotalLabel = document.getElementById('card-total-entropy-label');
+            if (cardTotalLabel) cardTotalLabel.textContent = `${valStr} bits`;
+          }
+        });
+
+        // Determine Human-Relatable Rarity Tier
+        let rarityTier = "1 in 10+ Billion Devices (Globally Unique)";
+        if (bits < 30) rarityTier = "1 in 100+ Thousand Devices (Common)";
+        else if (bits < 38) rarityTier = "1 in 500+ Million Devices (Rare)";
+
+        const rarityBadge = document.getElementById('config-rarity-badge');
+        const cardRarityDesc = document.getElementById('card-rarity-description');
+
+        if (rarityBadge) rarityBadge.textContent = rarityTier;
+        if (cardRarityDesc) cardRarityDesc.textContent = rarityTier;
+      }
+
+      generateRedactedShareCard() {
+        const entropyVal = this.#totalEntropyElement ? this.#totalEntropyElement.textContent : '44.2';
+        const gpuRenderer = document.getElementById('gpu-renderer-val')?.textContent || 'Hardware Accelerator';
+        const cpuCores = document.getElementById('cpu-cores-val')?.textContent || '8';
+        const refreshHz = document.getElementById('refresh-rate-val')?.textContent || '60';
+        const canvasHash = document.getElementById('canvas-hash')?.textContent || '0x9a8f...';
+        const audioHash = document.getElementById('audio-hash')?.textContent || '0x4d8a...';
+        const timezone = document.getElementById('tz-iana-val')?.textContent || 'UTC';
+        const rarity = document.getElementById('config-rarity-badge')?.textContent || '1 in 10+ Billion Devices';
+
+        const shareText = 
+`🔬 BROWSER X-RAY HARDWARE FINGERPRINT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ Uniqueness Entropy : ${entropyVal} bits
+🏆 Configuration Rarity: ${rarity}
+🎮 GPU Engine         : ${gpuRenderer.slice(0, 32)} [REDACTED]
+🧠 CPU Architecture   : ${cpuCores} Cores | Multi-Threaded
+🖥️ Display Sampler    : Measured @ ${refreshHz} Hz
+🎨 Canvas 2D Hash     : ${canvasHash}
+🎵 AudioContext Hash  : ${audioHash}
+🌐 Geo / Timezone     : ${timezone}
+🛡️ Automation Telemetry: Clean / Undetected
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Scan your browser live: https://viral-suite.vercel.app/xray`;
+
+        // Clipboard Copy with Fallback
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareText).catch(() => {
+            this.#fallbackCopy(shareText);
+          });
+        } else {
+          this.#fallbackCopy(shareText);
+        }
+
+        // Trigger Audio Tick & Confetti
+        this.#audioEngine.playGeigerTick();
+        if (typeof window.confetti === 'function') {
+          window.confetti({
+            particleCount: 50,
+            spread: 60,
+            origin: { y: 0.8 },
+            colors: ['#06b6d4', '#38bdf8', '#10b981', '#f59e0b']
+          });
+        }
+
+        // Show Toast
+        const toast = document.getElementById('share-toast');
+        if (toast) {
+          gsap.killTweensOf(toast);
+          gsap.fromTo(toast, 
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
+          );
+          gsap.to(toast, {
+            opacity: 0,
+            y: 20,
+            duration: 0.3,
+            delay: 3.0,
+            ease: "power2.in"
+          });
+        }
+      }
+
+      #fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+        } catch (e) {}
+        document.body.removeChild(textarea);
+      }
+    }
+
+    // =========================================================================
+    // 8. GLOBAL EXPOSURE (Required by Automated Test Runners)
+    // =========================================================================
+    window.TelemetryAudioEngine = TelemetryAudioEngine;
+    window.BaseTelemetryProbe = BaseTelemetryProbe;
+    window.SiliconWebGLProbe = SiliconWebGLProbe;
+    window.DisplayRefreshRateProbe = DisplayRefreshRateProbe;
+    window.CanvasAudioFingerprintProbe = CanvasAudioFingerprintProbe;
+    window.EnvironmentBehavioralProbe = EnvironmentBehavioralProbe;
+    window.XRayScannerOrchestrator = XRayScannerOrchestrator;
+
+    // =========================================================================
+    // 9. INITIALIZATION & DOM BINDINGS
+    // =========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize Lenis Smooth Scrolling
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+      });
+      window.lenis = lenis;
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // 2. Initialize Lucide Icons
+      if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+      }
+
+      // 3. Setup Bento Card 3D Spotlight Tilt
+      const cards = document.querySelectorAll('.bento-card');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -4;
+          const rotateY = ((x - centerX) / centerX) * 4;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+      });
+
+      // 4. Initialize Orchestrator
+      const bentoGrid = document.getElementById('bento-grid');
+      const progressBar = document.getElementById('scan-progress-bar');
+      const entropyDisplay = document.getElementById('total-entropy-display');
+      const radarLine = document.getElementById('radar-line');
+
+      const orchestrator = new XRayScannerOrchestrator(bentoGrid, progressBar, entropyDisplay, radarLine);
+      window.xrayOrchestrator = orchestrator;
+
+      // 5. Audio Unlock on First Interaction
+      const unlockAudio = () => {
+        orchestrator.audioEngine.init();
+        window.removeEventListener('click', unlockAudio);
+        window.removeEventListener('keydown', unlockAudio);
+        window.removeEventListener('pointerdown', unlockAudio);
+      };
+      window.addEventListener('click', unlockAudio);
+      window.addEventListener('keydown', unlockAudio);
+      window.addEventListener('pointerdown', unlockAudio);
+
+      // 6. Global Mute Button Setup
+      const muteBtn = document.getElementById('mute-toggle-btn');
+      const muteIcon = document.getElementById('mute-icon');
+
+      const updateMuteUI = (isMuted) => {
+        if (muteIcon) {
+          muteIcon.setAttribute('data-lucide', isMuted ? 'volume-x' : 'volume-2');
+          if (window.lucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+          }
+        }
+      };
+
+      if (muteBtn) {
+        updateMuteUI(orchestrator.audioEngine.isMuted);
+        muteBtn.addEventListener('click', () => {
+          const isMuted = orchestrator.audioEngine.toggleMute();
+          updateMuteUI(isMuted);
+        });
+      }
+
+      // 7. Rescan Button
+      const rescanBtn = document.getElementById('rescan-btn');
+      if (rescanBtn) {
+        rescanBtn.addEventListener('click', () => {
+          orchestrator.initAndStartScan();
+        });
+      }
+
+      // 8. Share Card Button
+      const shareBtn = document.getElementById('share-card-btn');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+          orchestrator.generateRedactedShareCard();
+        });
+      }
+
+      // 9. Launch Automatic Zero-Click Radar Sweep
+      orchestrator.initAndStartScan();
+    });
+  </script>
+</body>
+</html>

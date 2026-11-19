@@ -1,0 +1,2229 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human or AI Slop? — 60-Second Daily Turing Game | Viral Suite</title>
+  <meta name="description" content="Can you distinguish authentic human writing from synthetic AI slop? Test your instincts against 5 forensic formats in this 60-second daily Turing test.">
+  <link rel="canonical" href="https://viral-suite.vercel.app/slop">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Human or AI Slop? — 60-Second Daily Turing Game">
+  <meta property="og:description" content="Test your forensic linguistic instincts against 5 authentic vs synthetic internet artifacts in 60 seconds.">
+  <meta property="og:url" content="https://viral-suite.vercel.app/slop">
+  <meta property="og:image" content="https://viral-suite.vercel.app/og-slop.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Tailwind CSS 3.x CDN with Dark Cyber Preset -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#0a0c14',
+              surface: '#111422',
+              card: '#161a2e',
+              border: '#242b4a',
+              primary: '#3b82f6',
+              success: '#10b981',
+              warning: '#f59e0b',
+              danger: '#ef4444',
+              purple: '#8b5cf6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- GSAP 3.12 Core + Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+
+  <!-- Lenis 1.1 Smooth Inertia Scrolling -->
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Custom Styling & Cyber Glowing Card Utilities */
+    body {
+      background-color: #0a0c14;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+
+    .spotlight-card {
+      position: relative;
+      background: rgba(17, 20, 34, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.25rem;
+      transform-style: preserve-3d;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: radial-gradient(
+        450px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+        rgba(139, 92, 246, 0.35),
+        transparent 50%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .spotlight-card:hover::before {
+      opacity: 1;
+    }
+
+    /* 3D Perspective Card Flip Container */
+    .perspective-container {
+      perspective: 1200px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      width: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Scanline Background Texture */
+    .bg-cyber-grid {
+      background-size: 36px 36px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+
+    /* Glow utilities */
+    .glow-purple {
+      box-shadow: 0 0 35px -5px rgba(139, 92, 246, 0.35);
+    }
+    .glow-emerald {
+      box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.35);
+    }
+    .glow-rose {
+      box-shadow: 0 0 35px -5px rgba(244, 63, 94, 0.35);
+    }
+
+    /* Custom Scrollbar for Drawer */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0c14;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #242b4a;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3b82f6;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-cyber-bg font-sans selection:bg-purple-500/30 selection:text-purple-200">
+
+  <!-- Ambient Glowing Radial Background Blobs -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-40 left-1/4 w-96 h-96 bg-purple-600/15 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/3 -right-20 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px]"></div>
+    <div class="absolute -bottom-20 left-1/3 w-96 h-96 bg-emerald-600/10 rounded-full blur-[120px]"></div>
+  </div>
+
+  <div class="relative z-10 flex flex-col min-h-screen">
+    
+    <!-- Top Global Header -->
+    <header class="border-b border-white/10 bg-slate-900/60 backdrop-blur-xl sticky top-0 z-40">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        
+        <!-- Left: Logo & Suite Breadcrumb -->
+        <div class="flex items-center gap-3">
+          <a href="/index.html" class="flex items-center gap-2.5 group">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform">
+              <i data-lucide="bot" class="w-5 h-5 text-white"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-mono font-bold tracking-wider text-purple-400">VIRAL SUITE</span>
+                <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">M3 // LAB</span>
+              </div>
+              <h1 class="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">
+                Human or AI Slop?
+                <span class="text-[11px] text-slate-400 font-normal hidden sm:inline">— Daily Turing Game</span>
+              </h1>
+            </div>
+          </a>
+        </div>
+
+        <!-- Center: Game Mode Toggle Pills -->
+        <div class="hidden sm:flex items-center p-1 rounded-full bg-slate-950/70 border border-white/10 text-xs font-medium font-mono">
+          <button id="mode-daily-btn" class="px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 bg-purple-600 text-white shadow-sm">
+            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+            <span>Daily #<span id="daily-date-label">2026-11-18</span></span>
+          </button>
+          <button id="mode-arcade-btn" class="px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 text-slate-400 hover:text-white">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+            <span>Endless Arcade</span>
+          </button>
+        </div>
+
+        <!-- Right: Telemetry Stats & Sound Toggle -->
+        <div class="flex items-center gap-2.5">
+          <!-- Score Pill -->
+          <div class="px-3 py-1.5 rounded-xl bg-slate-950/60 border border-white/10 flex items-center gap-2 font-mono">
+            <span class="text-[11px] text-slate-400 font-medium">SCORE</span>
+            <span id="header-score" class="text-xs font-bold text-emerald-400">0</span>
+          </div>
+
+          <!-- Streak Pill -->
+          <div class="px-3 py-1.5 rounded-xl bg-slate-950/60 border border-white/10 flex items-center gap-1.5 font-mono">
+            <span id="header-streak-icon" class="text-amber-400">🔥</span>
+            <span id="header-streak-multiplier" class="text-xs font-bold text-amber-300">1.0x</span>
+          </div>
+
+          <!-- Sound Mute Toggle -->
+          <button id="top-mute-btn" aria-label="Toggle Micro-Haptic Audio" class="w-9 h-9 rounded-xl bg-slate-950/60 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:border-purple-500/50 transition-all">
+            <i data-lucide="volume-2" id="top-mute-icon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Mode Selector Bar -->
+      <div class="sm:hidden px-4 py-2 border-t border-white/5 bg-slate-950/40 flex items-center justify-between text-xs font-mono">
+        <button id="mobile-mode-daily-btn" class="text-purple-400 font-semibold flex items-center gap-1">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Daily Mode
+        </button>
+        <button id="mobile-mode-arcade-btn" class="text-slate-400 flex items-center gap-1">
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i> Arcade Mode
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 pt-6 pb-28 flex flex-col justify-center">
+
+      <!-- Round Progress & 10.0s Timer Bar -->
+      <div class="mb-5 space-y-2">
+        <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+          <div class="flex items-center gap-2">
+            <span id="round-indicator-label" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-slate-300 font-semibold">ROUND 1 OF 5</span>
+            <span id="format-tag-label" class="text-purple-400 font-medium">Breaking News Headline</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="timer" class="w-3.5 h-3.5 text-slate-400"></i>
+            <span id="timer-text" class="font-bold text-slate-200">10.0s</span>
+          </div>
+        </div>
+
+        <!-- Timer Depleting Bar -->
+        <div class="h-2 w-full bg-slate-900 rounded-full overflow-hidden border border-white/10 relative p-0.5">
+          <div id="timer-progress-bar" class="timer-progress h-full bg-emerald-500 rounded-full transition-[background-color] duration-300" style="width: 100%;"></div>
+        </div>
+
+        <!-- Round History Dots (Daily Mode) -->
+        <div id="round-dots-container" class="flex items-center justify-center gap-2 pt-1">
+          <div class="w-2.5 h-2.5 rounded-full bg-purple-500 ring-2 ring-purple-400/50"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-slate-800 border border-white/10"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-slate-800 border border-white/10"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-slate-800 border border-white/10"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-slate-800 border border-white/10"></div>
+        </div>
+      </div>
+
+      <!-- 3D Flipping Card Section -->
+      <div class="perspective-container w-full relative min-h-[460px] sm:min-h-[420px]">
+        <div id="flip-card-inner" class="flip-card-inner">
+          
+          <!-- =================== FRONT FACE (GUESSING STATE) =================== -->
+          <div id="flip-card-front" class="flip-card-front spotlight-card p-6 sm:p-8 flex flex-col justify-between min-h-[460px] sm:min-h-[420px] shadow-2xl">
+            
+            <!-- Card Meta Header -->
+            <div>
+              <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+                <div class="flex items-center gap-2.5">
+                  <div id="card-format-icon-wrap" class="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                    <i data-lucide="newspaper" class="w-4 h-4" id="card-format-icon"></i>
+                  </div>
+                  <div>
+                    <span id="card-format-name" class="text-xs font-mono font-semibold tracking-wide text-purple-300 uppercase">BREAKING NEWS HEADLINE</span>
+                    <p id="card-source-name" class="text-[11px] text-slate-400 font-mono">Source: Tech Chronicle</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-mono text-slate-300">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>UNVERIFIED SPECIMEN</span>
+                </div>
+              </div>
+
+              <!-- Polymorphic Card Content Slot -->
+              <div id="specimen-content-slot" class="py-2">
+                <!-- Dynamically populated by round.renderCardContent() -->
+              </div>
+            </div>
+
+            <!-- Big Tactile Decision Buttons -->
+            <div class="mt-8 pt-6 border-t border-white/10">
+              <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                
+                <!-- Real Human Button -->
+                <button id="btn-guess-human" class="relative group overflow-hidden py-4 px-4 sm:px-6 rounded-xl bg-gradient-to-r from-emerald-950/60 to-slate-900 border border-emerald-500/40 hover:border-emerald-400 text-left transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-emerald-500/20">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-mono text-emerald-400 font-bold flex items-center gap-1">
+                      <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40">KEY [A]</span>
+                      <span class="hidden sm:inline">or [←]</span>
+                    </span>
+                    <i data-lucide="user-check" class="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform"></i>
+                  </div>
+                  <div class="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                    REAL HUMAN
+                  </div>
+                  <div class="text-[11px] text-slate-400 font-sans">
+                    Authentic human cadence & quirks
+                  </div>
+                </button>
+
+                <!-- AI Slop Button -->
+                <button id="btn-guess-ai" class="relative group overflow-hidden py-4 px-4 sm:px-6 rounded-xl bg-gradient-to-r from-rose-950/60 to-slate-900 border border-rose-500/40 hover:border-rose-400 text-left transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-rose-500/20">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-mono text-rose-400 font-bold flex items-center gap-1">
+                      <span class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40">KEY [L]</span>
+                      <span class="hidden sm:inline">or [→]</span>
+                    </span>
+                    <i data-lucide="bot" class="w-4 h-4 text-rose-400 group-hover:scale-110 transition-transform"></i>
+                  </div>
+                  <div class="text-base sm:text-lg font-bold text-white group-hover:text-rose-300 transition-colors">
+                    AI SLOP
+                  </div>
+                  <div class="text-[11px] text-slate-400 font-sans">
+                    Synthetic padding & sycophancy
+                  </div>
+                </button>
+
+              </div>
+
+              <!-- Shortcut Hint Footer -->
+              <p class="text-center text-[11px] text-slate-400 font-mono mt-3">
+                Keyboard shortcuts enabled: Press <kbd class="px-1 py-0.5 rounded bg-white/10 text-slate-200">A</kbd> for Human, <kbd class="px-1 py-0.5 rounded bg-white/10 text-slate-200">L</kbd> for AI Slop.
+              </p>
+            </div>
+
+          </div>
+
+
+          <!-- =================== BACK FACE (VERDICT & FORENSICS) =================== -->
+          <div id="flip-card-back" class="flip-card-back spotlight-card p-6 sm:p-8 flex flex-col justify-between min-h-[460px] sm:min-h-[420px] shadow-2xl">
+            
+            <div>
+              <!-- Verdict Banner -->
+              <div id="verdict-banner" class="rounded-xl p-4 mb-5 border transition-all flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div id="verdict-icon-wrap" class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg">
+                    <!-- Icon populated dynamically -->
+                  </div>
+                  <div>
+                    <h3 id="verdict-title" class="text-base sm:text-lg font-bold text-white tracking-tight">SPOT ON!</h3>
+                    <p id="verdict-subtitle" class="text-xs text-slate-300 font-mono">+180 pts • 1.5x Multiplier</p>
+                  </div>
+                </div>
+
+                <div id="identity-pill" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider">
+                  <!-- Identity badge populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Linguistic Token Highlighting Specimen -->
+              <div class="mb-4">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+                  <span class="font-semibold text-slate-300">FORENSIC LINGUISTIC SPECIMEN</span>
+                  <div class="flex items-center gap-3 text-[11px]">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500/50 border border-emerald-400 inline-block"></span> Human Markers</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-rose-500/50 border border-rose-400 inline-block"></span> AI Slop Clues</span>
+                  </div>
+                </div>
+
+                <!-- Specimen Card with Highlighted Tokens -->
+                <div id="tokenized-specimen-box" class="p-4 sm:p-5 rounded-xl bg-slate-950/80 border border-white/10 font-sans text-sm sm:text-base leading-relaxed text-slate-200">
+                  <!-- Highlighted tokens inserted here -->
+                </div>
+              </div>
+
+              <!-- Forensic Explanation Drawer -->
+              <div class="rounded-xl bg-purple-950/20 border border-purple-500/30 p-4">
+                <div class="flex items-start gap-2.5">
+                  <i data-lucide="microscope" class="w-5 h-5 text-purple-400 shrink-0 mt-0.5"></i>
+                  <div>
+                    <h4 class="text-xs font-mono font-bold text-purple-300 uppercase tracking-wider mb-1">FORENSIC ANALYSIS & LINGUISTIC TELLS</h4>
+                    <p id="forensic-explanation-text" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+                      <!-- Explanation dynamically populated -->
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Continue Button -->
+            <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+              <span class="text-xs font-mono text-slate-400 hidden sm:inline">
+                Press <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-200 font-bold">Space</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-200 font-bold">Enter</kbd> to proceed
+              </span>
+              <button id="btn-next-round" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                <span>CONTINUE TO NEXT ROUND</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Wordle-Style End-of-Game Modal -->
+    <div id="scorecard-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="scorecard-card" class="spotlight-card max-w-lg w-full p-6 sm:p-8 bg-slate-900/95 border border-purple-500/30 shadow-2xl rounded-2xl scale-95 transition-transform duration-300 relative overflow-hidden">
+        
+        <!-- Background Glowing Glow -->
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Modal Header -->
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 text-purple-400 mb-3 shadow-lg shadow-purple-500/20">
+            <i data-lucide="award" class="w-6 h-6"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-white tracking-tight">TURING TEST DEBRIEF</h2>
+          <p id="modal-mode-date" class="text-xs font-mono text-slate-400 mt-1">DAILY CHALLENGE #2026-11-18</p>
+        </div>
+
+        <!-- Score & IQ Rank Banner -->
+        <div class="p-4 rounded-xl bg-slate-950/80 border border-white/10 mb-6 text-center">
+          <div class="text-xs font-mono text-purple-300 uppercase tracking-wider mb-1">TOTAL TURING SCORE</div>
+          <div id="modal-total-score" class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-purple-300 to-indigo-400 font-mono tracking-tight">
+            1,420 PTS
+          </div>
+          <div id="modal-rank-badge" class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/40 text-xs font-mono text-purple-200 font-semibold">
+            <span>🌟 BLADE RUNNER (Turing IQ: 155)</span>
+          </div>
+        </div>
+
+        <!-- Visual Emoji Matrix -->
+        <div class="mb-6">
+          <div class="text-xs font-mono text-slate-400 mb-2 flex items-center justify-between">
+            <span>PERFORMANCE MATRIX</span>
+            <span id="modal-accuracy-count" class="font-bold text-slate-200">5 / 5 Correct (100%)</span>
+          </div>
+          <div id="modal-emoji-grid" class="flex items-center justify-center gap-3 text-3xl py-3 px-4 rounded-xl bg-slate-950/60 border border-white/5">
+            <span>🟩</span>
+            <span>🤖</span>
+            <span>🟩</span>
+            <span>🤖</span>
+            <span>🟩</span>
+          </div>
+          <div class="flex items-center justify-center gap-4 text-[11px] font-mono text-slate-400 mt-2">
+            <span>🟩 Real Human</span>
+            <span>🤖 AI Slop Spot</span>
+            <span>🟥 Missed Human</span>
+            <span>❌ Duped by Slop</span>
+          </div>
+        </div>
+
+        <!-- Combo Stats -->
+        <div class="grid grid-cols-2 gap-3 mb-6 font-mono text-xs">
+          <div class="p-3 rounded-lg bg-white/5 border border-white/10 text-center">
+            <span class="text-slate-400 block text-[10px]">MAX COMBO STREAK</span>
+            <span id="modal-max-streak" class="text-base font-bold text-amber-400">🔥 3.0x Combo</span>
+          </div>
+          <div class="p-3 rounded-lg bg-white/5 border border-white/10 text-center">
+            <span class="text-slate-400 block text-[10px]">AVG REACTION TIME</span>
+            <span id="modal-avg-time" class="text-base font-bold text-emerald-400">3.4s</span>
+          </div>
+        </div>
+
+        <!-- Modal Action Buttons -->
+        <div class="space-y-2.5">
+          <!-- 1-Click Copy Result Button -->
+          <button id="btn-share-scorecard" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99]">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+            <span>COPY VIRAL SCORECARD (WORDLE-STYLE)</span>
+          </button>
+
+          <!-- Play Arcade / Replay Button -->
+          <button id="btn-modal-arcade" class="w-full py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium text-xs font-mono flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-purple-400"></i>
+            <span id="modal-play-again-label">PLAY ENDLESS ARCADE MODE</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Toast Notification for Clipboard Copy -->
+    <div id="toast-notification" class="fixed top-20 right-6 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-300 pointer-events-none">
+      <div class="px-4 py-3 rounded-xl bg-slate-900/95 border border-emerald-500/50 shadow-2xl shadow-emerald-500/20 text-white text-xs font-mono flex items-center gap-2.5">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+        <span>Scorecard copied to clipboard! Ready to share.</span>
+      </div>
+    </div>
+
+    <!-- Universal Cross-Tool Floating Glass Dock -->
+    <nav id="viral-dock" aria-label="Tool Navigation" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 px-3 py-2 rounded-full bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl flex items-center gap-1 sm:gap-2">
+      <a href="/index.html" data-tool="breach" class="dock-item relative group flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+        <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-400"></i>
+        <span class="hidden md:inline">Was I Hit?</span>
+      </a>
+      <a href="/slop.html" data-tool="slop" class="dock-item relative group flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold text-white bg-purple-600/30 border border-purple-500/40 shadow-lg shadow-purple-500/20 transition-all">
+        <i data-lucide="bot" class="w-4 h-4 text-purple-400"></i>
+        <span class="hidden md:inline">Human or Slop?</span>
+      </a>
+      <a href="/smash.html" data-tool="smash" class="dock-item relative group flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+        <i data-lucide="hammer" class="w-4 h-4 text-rose-400"></i>
+        <span class="hidden md:inline">Smash Stress</span>
+      </a>
+      <a href="/xray.html" data-tool="xray" class="dock-item relative group flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+        <i data-lucide="scan" class="w-4 h-4 text-cyan-400"></i>
+        <span class="hidden md:inline">Browser X-Ray</span>
+      </a>
+      <a href="/receipt.html" data-tool="receipt" class="dock-item relative group flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+        <i data-lucide="receipt" class="w-4 h-4 text-amber-400"></i>
+        <span class="hidden md:inline">Plot Twist</span>
+      </a>
+      <div class="h-4 w-px bg-white/20 mx-1"></div>
+      <button id="dock-mute-btn" aria-label="Toggle Audio Haptics" class="p-2 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+        <i data-lucide="volume-2" id="dock-mute-icon" class="w-4 h-4"></i>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- Master ES6+ Application Script -->
+  <script>
+    /**
+     * VIRAL SUITE: TOOL #2 (slop.html)
+     * "Human or AI Slop?" — 60-Second Daily Turing Game
+     * 
+     * Architecture:
+     * - Pure ECMAScript 2022 OOP with private '#' fields and polymorphic inheritance.
+     * - Zero external audio/MP3 dependencies; pure browser AudioContext synthesis.
+     * - Deterministic Mulberry32 date-seeded PRNG for Daily Challenge.
+     * - GSAP 3.12 3D perspective flip motion & 10.0-second countdown with heartbeat audio.
+     */
+
+    // ==========================================
+    // 1. DETERMINISTIC SEEDED PRNG (Mulberry32)
+    // ==========================================
+    class SeededPRNG {
+      #state;
+
+      constructor(seedString) {
+        this.#state = this.#hashString(seedString);
+      }
+
+      #hashString(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0;
+        }
+        return hash;
+      }
+
+      next() {
+        let t = (this.#state += 0x6D2B79F5);
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      }
+
+      nextInt(min, max) {
+        return Math.floor(min + this.next() * (max - min + 1));
+      }
+    }
+
+    // ==========================================
+    // 2. PROCEDURAL ARCADE AUDIO SYNTHESIZER
+    // ==========================================
+    class ArcadeAudioSynthesizer {
+      #audioCtx = null;
+      #isMuted = false;
+      #masterGain = null;
+      #storageKey = 'viral_suite_haptics_muted';
+
+      constructor() {
+        this.#isMuted = localStorage.getItem(this.#storageKey) === 'true';
+      }
+
+      #ensureContext() {
+        if (!this.#audioCtx) {
+          const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtxClass) return false;
+          this.#audioCtx = new AudioCtxClass();
+          this.#masterGain = this.#audioCtx.createGain();
+          this.#masterGain.gain.setValueAtTime(this.#isMuted ? 0 : 0.22, this.#audioCtx.currentTime);
+          this.#masterGain.connect(this.#audioCtx.destination);
+        }
+        if (this.#audioCtx.state === 'suspended') {
+          this.#audioCtx.resume();
+        }
+        return true;
+      }
+
+      get isMuted() {
+        return this.#isMuted;
+      }
+
+      toggleMute() {
+        this.#isMuted = !this.#isMuted;
+        localStorage.setItem(this.#storageKey, String(this.#isMuted));
+        if (this.#masterGain && this.#audioCtx) {
+          this.#masterGain.gain.setTargetAtTime(this.#isMuted ? 0 : 0.22, this.#audioCtx.currentTime, 0.02);
+        }
+        return this.#isMuted;
+      }
+
+      playHoverTick() {
+        if (this.#isMuted || !this.#ensureContext()) return;
+        const osc = this.#audioCtx.createOscillator();
+        const gain = this.#audioCtx.createGain();
+        const now = this.#audioCtx.currentTime;
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1400, now);
+        osc.frequency.exponentialRampToValueAtTime(900, now + 0.02);
+
+        gain.gain.setValueAtTime(0.035, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
+
+        osc.connect(gain);
+        gain.connect(this.#masterGain);
+        osc.start(now);
+        osc.stop(now + 0.025);
+      }
+
+      playButtonClick() {
+        if (this.#isMuted || !this.#ensureContext()) return;
+        const osc = this.#audioCtx.createOscillator();
+        const gain = this.#audioCtx.createGain();
+        const now = this.#audioCtx.currentTime;
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(540, now);
+        osc.frequency.exponentialRampToValueAtTime(270, now + 0.05);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+        osc.connect(gain);
+        gain.connect(this.#masterGain);
+        osc.start(now);
+        osc.stop(now + 0.055);
+      }
+
+      playSuccessChime(multiplier = 1.0) {
+        if (this.#isMuted || !this.#ensureContext()) return;
+        // Ascending harmonic triad with pitch transposition based on streak multiplier
+        const baseNotes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        const pitchRatio = Math.min(2.0, Math.max(1.0, 1 + (multiplier - 1) * 0.25));
+        const now = this.#audioCtx.currentTime;
+
+        baseNotes.forEach((freq, idx) => {
+          const osc = this.#audioCtx.createOscillator();
+          const gain = this.#audioCtx.createGain();
+          const start = now + idx * 0.06;
+
+          osc.type = idx === baseNotes.length - 1 ? 'triangle' : 'sine';
+          osc.frequency.setValueAtTime(freq * pitchRatio, start);
+
+          gain.gain.setValueAtTime(0, start);
+          gain.gain.linearRampToValueAtTime(0.09, start + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.28);
+
+          osc.connect(gain);
+          gain.connect(this.#masterGain);
+          osc.start(start);
+          osc.stop(start + 0.3);
+        });
+      }
+
+      playErrorBuzzer() {
+        if (this.#isMuted || !this.#ensureContext()) return;
+        const osc1 = this.#audioCtx.createOscillator();
+        const osc2 = this.#audioCtx.createOscillator();
+        const gain = this.#audioCtx.createGain();
+        const now = this.#audioCtx.currentTime;
+
+        osc1.type = 'sawtooth';
+        osc2.type = 'square';
+        osc1.frequency.setValueAtTime(140, now);
+        osc2.frequency.setValueAtTime(147, now); // Dissonant tritone beating
+        osc1.frequency.exponentialRampToValueAtTime(80, now + 0.22);
+        osc2.frequency.exponentialRampToValueAtTime(85, now + 0.22);
+
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(this.#masterGain);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.24);
+        osc2.stop(now + 0.24);
+      }
+
+      playHeartbeat(urgency = 1.0) {
+        if (this.#isMuted || !this.#ensureContext()) return;
+        const now = this.#audioCtx.currentTime;
+        const baseFreq = 58;
+
+        const playThump = (time, volume) => {
+          const osc = this.#audioCtx.createOscillator();
+          const filter = this.#audioCtx.createBiquadFilter();
+          const gain = this.#audioCtx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(baseFreq, time);
+          osc.frequency.exponentialRampToValueAtTime(32, time + 0.08);
+
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(130, time);
+
+          gain.gain.setValueAtTime(volume, time);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.#masterGain);
+
+          osc.start(time);
+          osc.stop(time + 0.085);
+        };
+
+        const vol = 0.16 * Math.min(urgency, 2.0);
+        playThump(now, vol);
+        playThump(now + 0.11, vol * 0.75);
+      }
+
+      playScoreReveal() {
+        if (this.#isMuted || !this.#ensureContext()) return;
+        const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+        const now = this.#audioCtx.currentTime;
+
+        notes.forEach((freq, idx) => {
+          const osc = this.#audioCtx.createOscillator();
+          const gain = this.#audioCtx.createGain();
+          const start = now + idx * 0.05;
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, start);
+
+          gain.gain.setValueAtTime(0, start);
+          gain.gain.linearRampToValueAtTime(0.08, start + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
+
+          osc.connect(gain);
+          gain.connect(this.#masterGain);
+          osc.start(start);
+          osc.stop(start + 0.36);
+        });
+      }
+    }
+
+    // ==========================================
+    // 3. BASE TURING ROUND & DERIVED FORMAT CLASSES
+    // ==========================================
+    class BaseTuringRound {
+      #id;
+      #format;
+      #source;
+      #text;
+      #isAI;
+      #tokens;
+      #explanation;
+
+      constructor(id, format, source, text, isAI, tokens, explanation) {
+        if (new.target === BaseTuringRound) {
+          throw new Error('BaseTuringRound is an abstract class.');
+        }
+        this.#id = id;
+        this.#format = format;
+        this.#source = source;
+        this.#text = text;
+        this.#isAI = isAI;
+        this.#tokens = tokens;
+        this.#explanation = explanation;
+      }
+
+      get id() { return this.#id; }
+      get format() { return this.#format; }
+      get source() { return this.#source; }
+      get text() { return this.#text; }
+      get isAI() { return this.#isAI; }
+      get tokens() { return this.#tokens; }
+      get explanation() { return this.#explanation; }
+
+      renderCardContent() {
+        throw new Error('renderCardContent() must be implemented by subclass.');
+      }
+    }
+
+    /**
+     * Subclass 1: MessagingBubbleRound
+     * WhatsApp / Slack / iMessage chat bubble UI
+     */
+    class MessagingBubbleRound extends BaseTuringRound {
+      #timestamp;
+      #senderName;
+
+      constructor(data) {
+        super(data.id, data.format, data.source, data.text, data.isAI, data.tokens, data.explanation);
+        this.#timestamp = data.timestamp || '08:24 AM';
+        this.#senderName = data.senderName || 'Alex Chen';
+      }
+
+      renderCardContent() {
+        return `
+          <div class="rounded-2xl bg-slate-950/70 border border-white/10 p-5 font-sans">
+            <div class="flex items-center gap-3 mb-4 pb-3 border-b border-white/5">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center font-bold text-white text-sm shadow-md">
+                ${this.#senderName.split(' ').map(n => n[0]).join('')}
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <h4 class="text-sm font-semibold text-slate-100">${this.#senderName}</h4>
+                  <span class="text-[11px] font-mono text-slate-400">${this.#timestamp}</span>
+                </div>
+                <p class="text-xs text-slate-400">${this.source}</p>
+              </div>
+            </div>
+
+            <!-- Chat Bubble with realistic styling -->
+            <div class="flex items-start gap-2 max-w-xl">
+              <div class="relative bg-slate-800/90 text-slate-100 rounded-2xl rounded-tl-sm px-4 py-3.5 border border-white/10 shadow-lg text-sm sm:text-base leading-relaxed">
+                <p>${this.text}</p>
+                <div class="flex items-center justify-end gap-1 mt-1.5 text-[10px] text-slate-400 font-mono">
+                  <span>${this.#timestamp}</span>
+                  <span class="text-purple-400">✓✓</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    /**
+     * Subclass 2: EcommerceReviewRound
+     * Amazon / Yelp review card with star rating and verified purchase badge
+     */
+    class EcommerceReviewRound extends BaseTuringRound {
+      #rating;
+      #reviewerName;
+      #reviewDate;
+
+      constructor(data) {
+        super(data.id, data.format, data.source, data.text, data.isAI, data.tokens, data.explanation);
+        this.#rating = data.rating || 5;
+        this.#reviewerName = data.reviewerName || 'Verified Amazon Customer';
+        this.#reviewDate = data.reviewDate || 'November 12, 2026';
+      }
+
+      renderCardContent() {
+        const starsHtml = Array.from({ length: 5 }, (_, i) => i < this.#rating ? '★' : '☆').join('');
+        return `
+          <div class="rounded-2xl bg-slate-950/70 border border-white/10 p-5 font-sans">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-amber-400 text-lg tracking-widest">${starsHtml}</span>
+                <span class="text-xs font-mono font-bold text-slate-200">${this.#rating}.0 out of 5 stars</span>
+              </div>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                <i data-lucide="check-circle-2" class="w-3 h-3"></i> Verified Purchase
+              </span>
+            </div>
+
+            <div class="text-xs text-slate-400 font-mono mb-3">
+              Reviewed by <span class="text-slate-200 font-medium">${this.#reviewerName}</span> on ${this.#reviewDate}
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-white/5 text-sm sm:text-base text-slate-100 leading-relaxed italic">
+              "${this.text}"
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    /**
+     * Subclass 3: SocialFeedPostRound
+     * Reddit / Twitter post card with upvotes, handle, and avatar
+     */
+    class SocialFeedPostRound extends BaseTuringRound {
+      #handle;
+      #upvotes;
+      #subreddit;
+
+      constructor(data) {
+        super(data.id, data.format, data.source, data.text, data.isAI, data.tokens, data.explanation);
+        this.#handle = data.handle || '@cyber_drifter';
+        this.#upvotes = data.upvotes || '1.4k';
+        this.#subreddit = data.subreddit || 'r/technology';
+      }
+
+      renderCardContent() {
+        return `
+          <div class="rounded-2xl bg-slate-950/70 border border-white/10 p-5 font-sans">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-mono font-bold text-xs text-white shadow-md">
+                  ${this.#handle.slice(1, 3).toUpperCase()}
+                </div>
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-sm font-bold text-slate-200">${this.#handle}</span>
+                    <span class="text-xs font-mono text-purple-400">${this.#subreddit}</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 font-mono">Posted 3 hours ago</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1 text-slate-400 text-xs font-mono">
+                <i data-lucide="arrow-big-up" class="w-4 h-4 text-purple-400"></i>
+                <span class="font-bold text-slate-200">${this.#upvotes}</span>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-white/5 text-sm sm:text-base text-slate-100 leading-relaxed font-sans">
+              ${this.text}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    /**
+     * Subclass 4: HeadlineNewsRound
+     * Breaking news headline banner with publication badge and category tag
+     */
+    class HeadlineNewsRound extends BaseTuringRound {
+      #category;
+      #publishDate;
+
+      constructor(data) {
+        super(data.id, data.format, data.source, data.text, data.isAI, data.tokens, data.explanation);
+        this.#category = data.category || 'SCIENCE & TECHNOLOGY';
+        this.#publishDate = data.publishDate || 'Updated 14 mins ago';
+      }
+
+      renderCardContent() {
+        return `
+          <div class="rounded-2xl bg-slate-950/70 border border-white/10 p-6 font-sans">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-mono font-bold tracking-wider animate-pulse">
+                  BREAKING REPORT
+                </span>
+                <span class="text-xs font-mono text-slate-400">${this.#category}</span>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400">${this.#publishDate}</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-white/5">
+              <h3 class="text-lg sm:text-xl font-bold text-slate-100 tracking-tight leading-snug">
+                "${this.text}"
+              </h3>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    /**
+     * Subclass 5: DatingBioRound
+     * Dating app profile micro-bio card with Hinge/Tinder prompt
+     */
+    class DatingBioRound extends BaseTuringRound {
+      #prompt;
+      #age;
+      #city;
+
+      constructor(data) {
+        super(data.id, data.format, data.source, data.text, data.isAI, data.tokens, data.explanation);
+        this.#prompt = data.prompt || 'A random fact I love:';
+        this.#age = data.age || '27';
+        this.#city = data.city || 'Austin, TX';
+      }
+
+      renderCardContent() {
+        return `
+          <div class="rounded-2xl bg-slate-950/70 border border-white/10 p-6 font-sans">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 to-rose-500 flex items-center justify-center text-white text-xs font-bold">
+                  <i data-lucide="heart" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-200">Jordan, ${this.#age}</h4>
+                  <span class="text-[11px] font-mono text-slate-400">${this.#city}</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-purple-300 border border-white/10">
+                HINGE VERIFIED
+              </span>
+            </div>
+
+            <div class="rounded-xl bg-slate-900/60 border border-white/5 p-4">
+              <span class="text-xs font-mono font-semibold text-purple-400 uppercase tracking-wide block mb-1.5">
+                ${this.#prompt}
+              </span>
+              <p class="text-sm sm:text-base text-slate-100 leading-relaxed font-sans">
+                ${this.text}
+              </p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // ==========================================
+    // 4. MASTER FORENSIC DATASET (20 HANDCRAFTED SAMPLES)
+    // ==========================================
+    const TURING_DATASET_RAW = [
+      // ----------------------------------------
+      // FORMAT 1: BREAKING NEWS HEADLINE (4)
+      // ----------------------------------------
+      {
+        id: 'f1_ai_1',
+        format: 'headline',
+        source: 'Tech Chronicle',
+        text: "In a Groundbreaking Testament to Modern Innovation, Researchers Unveil Nature-Inspired Solar Panels That Mimic Leaf Biology",
+        isAI: true,
+        tokens: [
+          { text: "In a Groundbreaking", type: "ai" },
+          { text: "Testament to Modern Innovation,", type: "ai" },
+          { text: "Researchers Unveil", type: "neutral" },
+          { text: "Nature-Inspired", type: "ai" },
+          { text: "Solar Panels That Mimic Leaf Biology", type: "neutral" }
+        ],
+        explanation: "Classic LLM sycophancy: 'Groundbreaking Testament to' and 'Nature-Inspired' are cliché padding phrases with title-case buzzword cadence."
+      },
+      {
+        id: 'f1_human_1',
+        format: 'headline',
+        source: 'Ars Technica',
+        text: "Scientists glued tiny googly eyes onto delivery drones and birds immediately stopped dive-bombing them",
+        isAI: false,
+        tokens: [
+          { text: "Scientists glued tiny", type: "neutral" },
+          { text: "googly eyes", type: "human" },
+          { text: "onto delivery drones and birds immediately stopped", type: "neutral" },
+          { text: "dive-bombing them", type: "human" }
+        ],
+        explanation: "Authentic human journalism: visceral, unpretentious colloquial phrasing ('googly eyes', 'dive-bombing') with punchy informal cadence."
+      },
+      {
+        id: 'f1_ai_2',
+        format: 'headline',
+        source: 'Global Urban Daily',
+        text: "Navigating the Tapestry of Urban Architecture: How Smart Cities Are Revolutionizing Tomorrow's Commutes Today",
+        isAI: true,
+        tokens: [
+          { text: "Navigating the Tapestry", type: "ai" },
+          { text: "of Urban Architecture: How Smart Cities Are", type: "neutral" },
+          { text: "Revolutionizing Tomorrow's Commutes Today", type: "ai" }
+        ],
+        explanation: "Dead giveaway: 'Navigating the Tapestry' is one of the most frequently over-indexed metaphors across GPT-family models."
+      },
+      {
+        id: 'f1_human_2',
+        format: 'headline',
+        source: 'Associated Press',
+        text: "Coast Guard rescues Florida man attempting to cross Atlantic in giant makeshift hamster wheel for fourth time",
+        isAI: false,
+        tokens: [
+          { text: "Coast Guard rescues", type: "neutral" },
+          { text: "Florida man attempting to cross Atlantic", type: "human" },
+          { text: "in giant makeshift hamster wheel", type: "human" },
+          { text: "for fourth time", type: "human" }
+        ],
+        explanation: "Grounded absurd human reality: specific nautical logistics and the comedic fatigue of 'for fourth time'."
+      },
+
+      // ----------------------------------------
+      // FORMAT 2: VERIFIED E-COMMERCE REVIEW (4)
+      // ----------------------------------------
+      {
+        id: 'f2_human_1',
+        format: 'review',
+        source: 'Amazon Verified Purchase (Heavy Duty Winter Parka)',
+        rating: 4,
+        reviewerName: 'Marcus T.',
+        reviewDate: 'January 14, 2026',
+        text: "Bought this for my brother who is 6'4 and built like a brick outhouse. Sleeves are actually long enough, which is a miracle. Pocket zipper feels a bit cheap though.",
+        isAI: false,
+        tokens: [
+          { text: "brother who is 6'4 and", type: "neutral" },
+          { text: "built like a brick outhouse.", type: "human" },
+          { text: "which is a miracle.", type: "human" },
+          { text: "Pocket zipper feels a bit cheap though.", type: "human" }
+        ],
+        explanation: "Human authenticity markers: vivid colloquial idioms ('built like a brick outhouse') paired with pragmatic, balanced micro-criticisms."
+      },
+      {
+        id: 'f2_ai_1',
+        format: 'review',
+        source: 'Amazon Verified Purchase (Ceramic Chef Knife)',
+        rating: 5,
+        reviewerName: 'CulinaryEnthusiast42',
+        reviewDate: 'October 30, 2026',
+        text: "This knife seamlessly blends ergonomic excellence with razor-sharp precision. It is truly a game changer in the kitchen and a testament to culinary craftsmanship. Highly recommended!",
+        isAI: true,
+        tokens: [
+          { text: "seamlessly blends", type: "ai" },
+          { text: "ergonomic excellence", type: "ai" },
+          { text: "truly a game changer", type: "ai" },
+          { text: "testament to culinary craftsmanship.", type: "ai" }
+        ],
+        explanation: "Hallmark marketing slop: 'seamlessly blends', 'game changer', and 'testament to' convey zero personal physical tactile experience."
+      },
+      {
+        id: 'f2_human_2',
+        format: 'review',
+        source: 'Best Buy Verified (Mechanical Keyboard)',
+        rating: 5,
+        reviewerName: 'Dave from IT',
+        reviewDate: 'August 19, 2026',
+        text: "Accidentally spilled half a mug of black coffee right into the spacebar. Unplugged it, hit it with a hairdryer on cold for 20 mins. Still clacking away. 10/10.",
+        isAI: false,
+        tokens: [
+          { text: "spilled half a mug of black coffee", type: "human" },
+          { text: "hit it with a hairdryer on cold", type: "human" },
+          { text: "Still clacking away.", type: "human" }
+        ],
+        explanation: "Authentic user narrative: specific messy mishap ('hairdryer on cold for 20 mins') and tactile onomatopoeia ('clacking away')."
+      },
+      {
+        id: 'f2_ai_2',
+        format: 'review',
+        source: 'Amazon Verified (Ergonomic Office Chair)',
+        rating: 5,
+        reviewerName: 'ModernWorker2026',
+        reviewDate: 'July 8, 2026',
+        text: "A quintessential addition to any contemporary workspace. The ergonomic contours meticulously alleviate lumbar strain, fostering a harmonious symphony of comfort and utility.",
+        isAI: true,
+        tokens: [
+          { text: "A quintessential addition", type: "ai" },
+          { text: "meticulously alleviate", type: "ai" },
+          { text: "harmonious symphony of comfort and utility", type: "ai" }
+        ],
+        explanation: "Extravagant synthetic prose: real chair buyers don't describe lumbar cushions as a 'harmonious symphony of comfort and utility'."
+      },
+
+      // ----------------------------------------
+      // FORMAT 3: SICK DAY WHATSAPP / SLACK (4)
+      // ----------------------------------------
+      {
+        id: 'f3_human_1',
+        format: 'message',
+        source: 'WhatsApp (Direct to Team Lead)',
+        timestamp: '08:14 AM',
+        senderName: 'Liam Miller',
+        text: "hey Dave, got hit with brutal food poisoning from that sketchy taco van last night. won't be able to make standup. will try to push the PR once the room stops spinning. sorry",
+        isAI: false,
+        tokens: [
+          { text: "sketchy taco van", type: "human" },
+          { text: "won't be able to make standup.", type: "neutral" },
+          { text: "once the room stops spinning.", type: "human" },
+          { text: "sorry", type: "human" }
+        ],
+        explanation: "Natural workplace slack: uncapitalized sentence starters, vivid self-deprecating visceral context ('room stops spinning'), and informal guilt."
+      },
+      {
+        id: 'f3_ai_1',
+        format: 'message',
+        source: 'Slack Message (To Engineering Channel)',
+        timestamp: '08:30 AM',
+        senderName: 'DevBot Assistant',
+        text: "Good morning team. I am writing to formally notify you that I am experiencing acute gastrointestinal distress this morning and will be unable to attend our scheduled standup. I endeavor to check my email periodically.",
+        isAI: true,
+        tokens: [
+          { text: "writing to formally notify you", type: "ai" },
+          { text: "acute gastrointestinal distress", type: "ai" },
+          { text: "I endeavor to check", type: "ai" }
+        ],
+        explanation: "Synthetic over-formality: robotic Victorian phrasing ('acute gastrointestinal distress', 'endeavor to check') inappropriate for modern team Slack."
+      },
+      {
+        id: 'f3_human_2',
+        format: 'message',
+        source: 'iMessage (To Coworker)',
+        timestamp: '07:42 AM',
+        senderName: 'Sarah Jenkins',
+        text: "migraine with aura kicked in, can't even look at my phone right now. sleeping in a pitch black room. figma links are all in the sprint doc if anyone needs them",
+        isAI: false,
+        tokens: [
+          { text: "migraine with aura", type: "human" },
+          { text: "can't even look at my phone", type: "human" },
+          { text: "sleeping in a pitch black room.", type: "human" }
+        ],
+        explanation: "Terse clinical accuracy mixed with hurried informal typing and practical delegation without fluffy niceties."
+      },
+      {
+        id: 'f3_ai_2',
+        format: 'message',
+        source: 'Slack Direct Message',
+        timestamp: '08:05 AM',
+        senderName: 'Arthur Vance',
+        text: "Please accept my apologies for my absence today, as I am grappling with a severe viral affliction. I have diligently synchronized my pending deliverables and remain reachable via mobile.",
+        isAI: true,
+        tokens: [
+          { text: "grappling with a severe viral affliction.", type: "ai" },
+          { text: "diligently synchronized my pending deliverables", type: "ai" }
+        ],
+        explanation: "Uncanny corporate robot: 'grappling with a severe viral affliction' and 'diligently synchronized' sound like a nineteenth-century bureaucrat."
+      },
+
+      // ----------------------------------------
+      // FORMAT 4: VIRAL REDDIT / X REPLY (4)
+      // ----------------------------------------
+      {
+        id: 'f4_ai_1',
+        format: 'social',
+        source: 'Reddit r/technology (241 Upvotes)',
+        handle: '@ai_nuance_bot',
+        subreddit: 'r/technology',
+        upvotes: '241',
+        text: "It is crucial to remember that both perspectives hold validity. Delving into the nuances reveals that while AI accelerates productivity, we must balance it with ethical stewardship and human empathy.",
+        isAI: true,
+        tokens: [
+          { text: "It is crucial to remember", type: "ai" },
+          { text: "both perspectives hold validity.", type: "ai" },
+          { text: "Delving into the nuances", type: "ai" },
+          { text: "ethical stewardship", type: "ai" }
+        ],
+        explanation: "Diplomatic fence-sitting: LLMs avoid controversy by claiming 'both perspectives hold validity' and using 'Delving into the nuances' and 'stewardship'."
+      },
+      {
+        id: 'f4_human_1',
+        format: 'social',
+        source: 'X / Twitter (1.2K Likes)',
+        handle: '@greg_the_dev',
+        subreddit: 'x/twitter',
+        upvotes: '1.2k',
+        text: "My brother in Christ you just described a public library. You literally invented a library but worse and with a monthly subscription.",
+        isAI: false,
+        tokens: [
+          { text: "My brother in Christ", type: "human" },
+          { text: "you just described a public library.", type: "human" },
+          { text: "worse and with a monthly subscription.", type: "human" }
+        ],
+        explanation: "Cultural internet vernacular: 'My brother in Christ' meme cadence, rapid deflation of VC tech jargon with crushing common-sense comparison."
+      },
+      {
+        id: 'f4_ai_2',
+        format: 'social',
+        source: 'Reddit r/productivity (89 Upvotes)',
+        handle: '@momentum_guru',
+        subreddit: 'r/productivity',
+        upvotes: '89',
+        text: "Furthermore, fostering an environment where mindfulness intersects with rigorous discipline allows practitioners to cultivate sustainable momentum without succumbing to burnout.",
+        isAI: true,
+        tokens: [
+          { text: "Furthermore,", type: "ai" },
+          { text: "fostering an environment", type: "ai" },
+          { text: "intersects with rigorous discipline", type: "ai" },
+          { text: "cultivate sustainable momentum", type: "ai" }
+        ],
+        explanation: "Abstract corporate salad: zero concrete action steps, heavy reliance on transition adverb 'Furthermore', and passive noun strings."
+      },
+      {
+        id: 'f4_human_2',
+        format: 'social',
+        source: 'Reddit r/ProgrammerHumor (3.4K Upvotes)',
+        handle: '@null_pointer_ex',
+        subreddit: 'r/ProgrammerHumor',
+        upvotes: '3.4k',
+        text: "I showed this diagram to our senior architect and he stared out the window for seven minutes without blinking before whispering 'no'.",
+        isAI: false,
+        tokens: [
+          { text: "stared out the window for seven minutes without blinking", type: "human" },
+          { text: "whispering 'no'.", type: "human" }
+        ],
+        explanation: "Exquisite comedic timing and hyper-specific physical behavior based on shared engineering trauma."
+      },
+
+      // ----------------------------------------
+      // FORMAT 5: DATING MICRO-BIO (4)
+      // ----------------------------------------
+      {
+        id: 'f5_human_1',
+        format: 'bio',
+        source: 'Hinge Profile Prompt: A random fact I love',
+        prompt: 'A random fact I love:',
+        age: '28',
+        city: 'Brooklyn, NY',
+        text: "Competitive parallel parker. Will silently judge your Spotify Wrapped. If we get tacos and you don't order chips & queso, what are we even doing here?",
+        isAI: false,
+        tokens: [
+          { text: "Competitive parallel parker.", type: "human" },
+          { text: "silently judge your Spotify Wrapped.", type: "human" },
+          { text: "what are we even doing here?", type: "human" }
+        ],
+        explanation: "Micro-quirks and conversational hyperbole: relatable modern pop-culture banter ('Spotify Wrapped', 'chips & queso') with self-aware humor."
+      },
+      {
+        id: 'f5_ai_1',
+        format: 'bio',
+        source: 'Bumble Bio',
+        prompt: 'About me:',
+        age: '26',
+        city: 'Seattle, WA',
+        text: "An intrepid soul fueled by wanderlust, deep conversations over artisanal coffee, and discovering hidden gems in the city. Seeking an authentic connection rooted in laughter and mutual growth.",
+        isAI: true,
+        tokens: [
+          { text: "intrepid soul fueled by wanderlust,", type: "ai" },
+          { text: "artisanal coffee,", type: "ai" },
+          { text: "discovering hidden gems", type: "ai" },
+          { text: "mutual growth.", type: "ai" }
+        ],
+        explanation: "Tinder bot archetype: 'intrepid soul', 'wanderlust', 'artisanal coffee', 'hidden gems'. Ultra-generic romance tropes assembled by predictive probability."
+      },
+      {
+        id: 'f5_human_2',
+        format: 'bio',
+        source: 'Tinder Bio',
+        prompt: 'My ideal Sunday:',
+        age: '29',
+        city: 'Chicago, IL',
+        text: "Just looking for someone to hold the flashlight while I yell at the car engine in the garage at 11pm.",
+        isAI: false,
+        tokens: [
+          { text: "hold the flashlight", type: "human" },
+          { text: "yell at the car engine in the garage", type: "human" }
+        ],
+        explanation: "Deeply specific comic absurdity: grounded in universal childhood domestic trauma and comedic domestic realism."
+      },
+      {
+        id: 'f5_ai_2',
+        format: 'bio',
+        source: 'Hinge Profile Prompt: Together, we could',
+        prompt: 'Together, we could:',
+        age: '25',
+        city: 'San Francisco, CA',
+        text: "Navigate the vibrant tapestry of existence while fostering meaningful dialogues and creating indelible memories beneath the starlit canopy.",
+        isAI: true,
+        tokens: [
+          { text: "vibrant tapestry of existence", type: "ai" },
+          { text: "fostering meaningful dialogues", type: "ai" },
+          { text: "indelible memories beneath the starlit canopy.", type: "ai" }
+        ],
+        explanation: "Purple prose generator: 'indelible memories beneath the starlit canopy' is pure synthetic romantic hallucination."
+      }
+    ];
+
+    // Factory helper to instantiate correct polymorphic round subclass
+    function createRoundInstance(data) {
+      switch (data.format) {
+        case 'headline': return new HeadlineNewsRound(data);
+        case 'review': return new EcommerceReviewRound(data);
+        case 'message': return new MessagingBubbleRound(data);
+        case 'social': return new SocialFeedPostRound(data);
+        case 'bio': return new DatingBioRound(data);
+        default: throw new Error(`Unknown format: ${data.format}`);
+      }
+    }
+
+    // ==========================================
+    // 5. TURING GAME ENGINE
+    // ==========================================
+    class TuringGameEngine {
+      #mode = 'daily'; // 'daily' or 'arcade'
+      #dailySeedKey = '';
+      #prng = null;
+      #dataset = [];
+      #activeRounds = [];
+      #currentIndex = 0;
+      #score = 0;
+      #streak = 0;
+      #maxStreak = 0;
+      #history = [];
+
+      constructor() {
+        this.#dataset = TURING_DATASET_RAW.map(item => createRoundInstance(item));
+        this.#dailySeedKey = new Date().toISOString().slice(0, 10);
+      }
+
+      get mode() { return this.#mode; }
+      get score() { return this.#score; }
+      get streak() { return this.#streak; }
+      get maxStreak() { return this.#maxStreak; }
+      get currentIndex() { return this.#currentIndex; }
+      get totalRounds() { return this.#activeRounds.length; }
+      get dailySeedKey() { return this.#dailySeedKey; }
+      get history() { return [...this.#history]; }
+
+      startDailyGame() {
+        this.#mode = 'daily';
+        this.#score = 0;
+        this.#streak = 0;
+        this.#maxStreak = 0;
+        this.#currentIndex = 0;
+        this.#history = [];
+        this.#prng = new SeededPRNG(`daily_turing_${this.#dailySeedKey}`);
+
+        // Daily mode picks exactly 1 sample from each of the 5 formats in sequence:
+        // Format sequence: headline -> review -> message -> social -> bio
+        const formatOrder = ['headline', 'review', 'message', 'social', 'bio'];
+        this.#activeRounds = [];
+
+        formatOrder.forEach(fmt => {
+          const matching = this.#dataset.filter(r => r.format === fmt);
+          const pickedIdx = this.#prng.nextInt(0, matching.length - 1);
+          this.#activeRounds.push(matching[pickedIdx]);
+        });
+      }
+
+      startArcadeGame() {
+        this.#mode = 'arcade';
+        this.#score = 0;
+        this.#streak = 0;
+        this.#maxStreak = 0;
+        this.#currentIndex = 0;
+        this.#history = [];
+
+        // Shuffle all 20 rounds randomly for endless arcade play
+        this.#activeRounds = [...this.#dataset].sort(() => Math.random() - 0.5);
+      }
+
+      getCurrentRound() {
+        if (this.#currentIndex >= this.#activeRounds.length) {
+          if (this.#mode === 'arcade') {
+            // Re-shuffle and extend endless arcade rounds
+            const more = [...this.#dataset].sort(() => Math.random() - 0.5);
+            this.#activeRounds.push(...more);
+          } else {
+            return null;
+          }
+        }
+        return this.#activeRounds[this.#currentIndex];
+      }
+
+      submitGuess(guessIsAI, remainingSeconds) {
+        const round = this.getCurrentRound();
+        if (!round) return null;
+
+        const isCorrect = guessIsAI === round.isAI;
+        const timeBonus = Math.max(0, Math.round(remainingSeconds * 10)); // 0 to 100 bonus pts
+        
+        let multiplier = 1.0;
+        if (isCorrect) {
+          this.#streak++;
+          this.#maxStreak = Math.max(this.#maxStreak, this.#streak);
+          if (this.#streak >= 7) multiplier = 3.0;
+          else if (this.#streak >= 5) multiplier = 2.0;
+          else if (this.#streak >= 3) multiplier = 1.5;
+          else multiplier = 1.0;
+        } else {
+          this.#streak = 0;
+          multiplier = 1.0;
+        }
+
+        const roundScore = isCorrect ? Math.round((100 + timeBonus) * multiplier) : 0;
+        this.#score += roundScore;
+
+        const resultRecord = {
+          roundIndex: this.#currentIndex,
+          roundId: round.id,
+          format: round.format,
+          isAI: round.isAI,
+          guessIsAI,
+          isCorrect,
+          roundScore,
+          timeBonus,
+          multiplier,
+          remainingSeconds
+        };
+
+        this.#history.push(resultRecord);
+        return resultRecord;
+      }
+
+      advanceNextRound() {
+        this.#currentIndex++;
+        return this.#currentIndex < this.#activeRounds.length || this.#mode === 'arcade';
+      }
+
+      getSummary() {
+        const total = this.#history.length;
+        const correctCount = this.#history.filter(h => h.isCorrect).length;
+        const accuracyPct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+        
+        let avgReactionTime = 0;
+        if (total > 0) {
+          const totalSpent = this.#history.reduce((acc, h) => acc + (10 - h.remainingSeconds), 0);
+          avgReactionTime = (totalSpent / total).toFixed(1);
+        }
+
+        // Rank Title and Turing IQ
+        let turingIQ = 80;
+        let rankTitle = 'DUPED BY SLOP';
+        if (correctCount === 5 || (total > 5 && accuracyPct >= 90)) {
+          turingIQ = 155;
+          rankTitle = '🌟 BLADE RUNNER';
+        } else if (correctCount === 4 || accuracyPct >= 75) {
+          turingIQ = 132;
+          rankTitle = '⚡ CYBER DETECTIVE';
+        } else if (correctCount === 3 || accuracyPct >= 60) {
+          turingIQ = 108;
+          rankTitle = '🔍 PATTERN RECOGNIZER';
+        } else if (correctCount === 2 || accuracyPct >= 40) {
+          turingIQ = 88;
+          rankTitle = '🤖 SYNTHETIC SYMPATHIZER';
+        } else {
+          turingIQ = 65;
+          rankTitle = '🧻 SLOP CONSUMER';
+        }
+
+        // Emoji Grid Representation
+        // 🟩 = Correctly identified human
+        // 🤖 = Correctly identified AI slop
+        // 🟥 = Mistook human for AI
+        // ❌ = Tricked by AI slop
+        const emojiRow = this.#history.map(h => {
+          if (h.isCorrect) {
+            return h.isAI ? '🤖' : '🟩';
+          } else {
+            return h.isAI ? '❌' : '🟥';
+          }
+        }).join(' ');
+
+        return {
+          mode: this.#mode,
+          dailySeedKey: this.#dailySeedKey,
+          score: this.#score,
+          streak: this.#streak,
+          maxStreak: this.#maxStreak,
+          totalRounds: total,
+          correctCount,
+          accuracyPct,
+          avgReactionTime,
+          turingIQ,
+          rankTitle,
+          emojiRow
+        };
+      }
+    }
+
+    // ==========================================
+    // 6. SPOTLIGHT & SMOOTH SCROLL CONTROLLERS
+    // ==========================================
+    class SpotlightAnimationController {
+      #cards = [];
+      #maxTiltDegrees = 6;
+      #boundMoveHandler = null;
+      #boundLeaveHandler = null;
+
+      constructor(selector = '.spotlight-card') {
+        this.#boundMoveHandler = this.#onMouseMove.bind(this);
+        this.#boundLeaveHandler = this.#onMouseLeave.bind(this);
+        this.refresh(selector);
+      }
+
+      refresh(selector = '.spotlight-card') {
+        this.#cards = Array.from(document.querySelectorAll(selector));
+        this.#cards.forEach((card) => {
+          card.removeEventListener('mousemove', card._boundMouseMove);
+          card.removeEventListener('mouseleave', card._boundMouseLeave);
+          
+          card._boundMouseMove = (e) => this.#boundMoveHandler(e, card);
+          card._boundMouseLeave = () => this.#boundLeaveHandler(card);
+
+          card.addEventListener('mousemove', card._boundMouseMove);
+          card.addEventListener('mouseleave', card._boundMouseLeave);
+        });
+      }
+
+      #onMouseMove(e, card) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = -((y - centerY) / centerY) * this.#maxTiltDegrees;
+        const rotateY = ((x - centerX) / centerX) * this.#maxTiltDegrees;
+
+        gsap.to(card, {
+          rotateX,
+          rotateY,
+          duration: 0.25,
+          ease: 'power2.out',
+          transformPerspective: 1000,
+        });
+      }
+
+      #onMouseLeave(card) {
+        card.style.setProperty('--mouse-x', '-500px');
+        card.style.setProperty('--mouse-y', '-500px');
+
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+        });
+      }
+    }
+
+    class SmoothScrollController {
+      #lenis = null;
+
+      constructor() {
+        if (typeof Lenis !== 'undefined') {
+          this.#lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            smoothWheel: true,
+          });
+
+          const raf = (time) => {
+            this.#lenis.raf(time);
+            requestAnimationFrame(raf);
+          };
+          requestAnimationFrame(raf);
+        }
+      }
+    }
+
+    // ==========================================
+    // 7. TURING UI CONTROLLER (MASTER ORCHESTRATOR)
+    // ==========================================
+    class TuringUIController {
+      #engine;
+      #audio;
+      #spotlight;
+      #timerTween = null;
+      #heartbeatInterval = null;
+      #remainingSeconds = 10.0;
+      #isGuessingActive = false;
+      #isFlipped = false;
+
+      // DOM Cached Elements
+      #dom = {};
+
+      constructor() {
+        this.#engine = new TuringGameEngine();
+        this.#audio = new ArcadeAudioSynthesizer();
+        this.#spotlight = new SpotlightAnimationController();
+        new SmoothScrollController();
+
+        this.#cacheDOMElements();
+        this.#bindEvents();
+        this.#initAudioGestures();
+
+        // Start initial Daily game
+        this.startDailyMode();
+      }
+
+      #cacheDOMElements() {
+        this.#dom = {
+          // Top bar & telemetry
+          headerScore: document.getElementById('header-score'),
+          headerStreakIcon: document.getElementById('header-streak-icon'),
+          headerStreakMultiplier: document.getElementById('header-streak-multiplier'),
+          topMuteBtn: document.getElementById('top-mute-btn'),
+          topMuteIcon: document.getElementById('top-mute-icon'),
+          dockMuteBtn: document.getElementById('dock-mute-btn'),
+          dockMuteIcon: document.getElementById('dock-mute-icon'),
+          dailyDateLabel: document.getElementById('daily-date-label'),
+          modeDailyBtn: document.getElementById('mode-daily-btn'),
+          modeArcadeBtn: document.getElementById('mode-arcade-btn'),
+          mobileModeDailyBtn: document.getElementById('mobile-mode-daily-btn'),
+          mobileModeArcadeBtn: document.getElementById('mobile-mode-arcade-btn'),
+
+          // Round & Timer
+          roundIndicatorLabel: document.getElementById('round-indicator-label'),
+          formatTagLabel: document.getElementById('format-tag-label'),
+          timerText: document.getElementById('timer-text'),
+          timerProgressBar: document.getElementById('timer-progress-bar'),
+          roundDotsContainer: document.getElementById('round-dots-container'),
+
+          // Flip Card Elements
+          flipCardInner: document.getElementById('flip-card-inner'),
+          cardFormatIcon: document.getElementById('card-format-icon'),
+          cardFormatName: document.getElementById('card-format-name'),
+          cardSourceName: document.getElementById('card-source-name'),
+          specimenContentSlot: document.getElementById('specimen-content-slot'),
+          btnGuessHuman: document.getElementById('btn-guess-human'),
+          btnGuessAI: document.getElementById('btn-guess-ai'),
+
+          // Back Face Elements
+          verdictBanner: document.getElementById('verdict-banner'),
+          verdictIconWrap: document.getElementById('verdict-icon-wrap'),
+          verdictTitle: document.getElementById('verdict-title'),
+          verdictSubtitle: document.getElementById('verdict-subtitle'),
+          identityPill: document.getElementById('identity-pill'),
+          tokenizedSpecimenBox: document.getElementById('tokenized-specimen-box'),
+          forensicExplanationText: document.getElementById('forensic-explanation-text'),
+          btnNextRound: document.getElementById('btn-next-round'),
+
+          // Scorecard Modal
+          scorecardModal: document.getElementById('scorecard-modal'),
+          scorecardCard: document.getElementById('scorecard-card'),
+          modalModeDate: document.getElementById('modal-mode-date'),
+          modalTotalScore: document.getElementById('modal-total-score'),
+          modalRankBadge: document.getElementById('modal-rank-badge'),
+          modalAccuracyCount: document.getElementById('modal-accuracy-count'),
+          modalEmojiGrid: document.getElementById('modal-emoji-grid'),
+          modalMaxStreak: document.getElementById('modal-max-streak'),
+          modalAvgTime: document.getElementById('modal-avg-time'),
+          btnShareScorecard: document.getElementById('btn-share-scorecard'),
+          btnModalArcade: document.getElementById('btn-modal-arcade'),
+          modalPlayAgainLabel: document.getElementById('modal-play-again-label'),
+
+          // Toast
+          toastNotification: document.getElementById('toast-notification')
+        };
+      }
+
+      #initAudioGestures() {
+        // Unlock Web Audio Context safely on first user gesture
+        const unlockAudio = () => {
+          this.#audio.playHoverTick();
+          window.removeEventListener('pointerdown', unlockAudio);
+          window.removeEventListener('keydown', unlockAudio);
+        };
+        window.addEventListener('pointerdown', unlockAudio, { once: true });
+        window.addEventListener('keydown', unlockAudio, { once: true });
+
+        // Synchronize initial mute state
+        this.#updateMuteIcons(this.#audio.isMuted);
+      }
+
+      #bindEvents() {
+        // Mute toggle buttons
+        const toggleMute = () => {
+          const isMuted = this.#audio.toggleMute();
+          this.#updateMuteIcons(isMuted);
+          if (!isMuted) this.#audio.playButtonClick();
+        };
+        this.#dom.topMuteBtn.addEventListener('click', toggleMute);
+        this.#dom.dockMuteBtn.addEventListener('click', toggleMute);
+
+        // Mode switch buttons
+        this.#dom.modeDailyBtn.addEventListener('click', () => {
+          this.#audio.playButtonClick();
+          this.startDailyMode();
+        });
+        this.#dom.modeArcadeBtn.addEventListener('click', () => {
+          this.#audio.playButtonClick();
+          this.startArcadeMode();
+        });
+        this.#dom.mobileModeDailyBtn.addEventListener('click', () => {
+          this.#audio.playButtonClick();
+          this.startDailyMode();
+        });
+        this.#dom.mobileModeArcadeBtn.addEventListener('click', () => {
+          this.#audio.playButtonClick();
+          this.startArcadeMode();
+        });
+
+        // Decision buttons
+        this.#dom.btnGuessHuman.addEventListener('click', () => {
+          this.#handleUserGuess(false);
+        });
+        this.#dom.btnGuessAI.addEventListener('click', () => {
+          this.#handleUserGuess(true);
+        });
+
+        // Next round button
+        this.#dom.btnNextRound.addEventListener('click', () => {
+          this.#audio.playButtonClick();
+          this.#advanceToNext();
+        });
+
+        // Scorecard modal buttons
+        this.#dom.btnShareScorecard.addEventListener('click', () => {
+          this.#copyScorecardToClipboard();
+        });
+        this.#dom.btnModalArcade.addEventListener('click', () => {
+          this.#audio.playButtonClick();
+          this.#hideScorecardModal();
+          this.startArcadeMode();
+        });
+
+        // Button hover sound ticks
+        const interactiveSelectors = 'button, .dock-item, #btn-guess-human, #btn-guess-ai';
+        document.querySelectorAll(interactiveSelectors).forEach(el => {
+          el.addEventListener('mouseenter', () => this.#audio.playHoverTick());
+        });
+
+        // Keyboard Shortcuts (A/Left for Human, L/Right for AI, Space/Enter for Next)
+        window.addEventListener('keydown', (e) => {
+          if (['input', 'textarea'].includes(document.activeElement?.tagName?.toLowerCase())) return;
+
+          if (this.#isGuessingActive) {
+            if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
+              e.preventDefault();
+              this.#handleUserGuess(false);
+            } else if (e.key === 'l' || e.key === 'L' || e.key === 'ArrowRight') {
+              e.preventDefault();
+              this.#handleUserGuess(true);
+            }
+          } else if (this.#isFlipped) {
+            if (e.key === ' ' || e.key === 'Enter') {
+              e.preventDefault();
+              this.#audio.playButtonClick();
+              this.#advanceToNext();
+            }
+          }
+        });
+      }
+
+      #updateMuteIcons(isMuted) {
+        const iconName = isMuted ? 'volume-x' : 'volume-2';
+        this.#dom.topMuteIcon.setAttribute('data-lucide', iconName);
+        this.#dom.dockMuteIcon.setAttribute('data-lucide', iconName);
+        if (window.lucide) lucide.createIcons();
+      }
+
+      startDailyMode() {
+        this.#engine.startDailyGame();
+        this.#dom.dailyDateLabel.textContent = this.#engine.dailySeedKey;
+        this.#updateModeUI('daily');
+        this.#hideScorecardModal();
+        this.#loadCurrentRound();
+      }
+
+      startArcadeMode() {
+        this.#engine.startArcadeGame();
+        this.#updateModeUI('arcade');
+        this.#hideScorecardModal();
+        this.#loadCurrentRound();
+      }
+
+      #updateModeUI(mode) {
+        if (mode === 'daily') {
+          this.#dom.modeDailyBtn.className = 'px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 bg-purple-600 text-white shadow-sm';
+          this.#dom.modeArcadeBtn.className = 'px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 text-slate-400 hover:text-white';
+          this.#dom.roundDotsContainer.classList.remove('hidden');
+        } else {
+          this.#dom.modeArcadeBtn.className = 'px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 bg-purple-600 text-white shadow-sm';
+          this.#dom.modeDailyBtn.className = 'px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 text-slate-400 hover:text-white';
+          this.#dom.roundDotsContainer.classList.add('hidden');
+        }
+      }
+
+      #loadCurrentRound() {
+        const round = this.#engine.getCurrentRound();
+        if (!round) {
+          this.#showScorecardModal();
+          return;
+        }
+
+        this.#isGuessingActive = true;
+        this.#isFlipped = false;
+
+        // Reset Card Flip & Perspective
+        gsap.set(this.#dom.flipCardInner, { rotateY: 0 });
+
+        // Update Round Labels
+        if (this.#engine.mode === 'daily') {
+          this.#dom.roundIndicatorLabel.textContent = `ROUND ${this.#engine.currentIndex + 1} OF 5`;
+          this.#updateRoundDots(this.#engine.currentIndex);
+        } else {
+          this.#dom.roundIndicatorLabel.textContent = `ARCADE ROUND ${this.#engine.currentIndex + 1}`;
+        }
+
+        // Update Format Header
+        const formatNames = {
+          headline: 'Breaking News Headline',
+          review: 'Verified E-Commerce Review',
+          message: 'Sick Day WhatsApp / Slack',
+          social: 'Viral Reddit / X Reply',
+          bio: 'Dating Micro-Bio'
+        };
+        const formatIcons = {
+          headline: 'newspaper',
+          review: 'star',
+          message: 'message-square',
+          social: 'trending-up',
+          bio: 'heart'
+        };
+
+        this.#dom.formatTagLabel.textContent = formatNames[round.format] || 'Forensic Specimen';
+        this.#dom.cardFormatName.textContent = formatNames[round.format] || 'Specimen';
+        this.#dom.cardSourceName.textContent = `Source: ${round.source}`;
+        this.#dom.cardFormatIcon.setAttribute('data-lucide', formatIcons[round.format] || 'file-text');
+
+        // Render Subclass Polymorphic Content
+        this.#dom.specimenContentSlot.innerHTML = round.renderCardContent();
+
+        // Refresh icons
+        if (window.lucide) lucide.createIcons();
+
+        // Entrance animation
+        gsap.fromTo(this.#dom.flipCardInner,
+          { x: 80, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' }
+        );
+
+        // Start 10.0s countdown timer
+        this.#startTimer();
+      }
+
+      #startTimer() {
+        this.#stopTimer();
+        this.#remainingSeconds = 10.0;
+        this.#dom.timerText.textContent = '10.0s';
+        this.#dom.timerProgressBar.style.width = '100%';
+        this.#dom.timerProgressBar.style.backgroundColor = '#10b981'; // Emerald
+
+        const timerObj = { progress: 100 };
+        this.#timerTween = gsap.to(timerObj, {
+          progress: 0,
+          duration: 10.0,
+          ease: 'none',
+          onUpdate: () => {
+            const currentSeconds = (timerObj.progress / 10).toFixed(1);
+            this.#remainingSeconds = Math.max(0, parseFloat(currentSeconds));
+            this.#dom.timerText.textContent = `${this.#remainingSeconds.toFixed(1)}s`;
+            this.#dom.timerProgressBar.style.width = `${timerObj.progress}%`;
+
+            // Color morph
+            if (this.#remainingSeconds > 5.0) {
+              this.#dom.timerProgressBar.style.backgroundColor = '#10b981'; // Emerald
+            } else if (this.#remainingSeconds > 2.5) {
+              this.#dom.timerProgressBar.style.backgroundColor = '#f59e0b'; // Amber
+            } else {
+              this.#dom.timerProgressBar.style.backgroundColor = '#ef4444'; // Crimson
+            }
+          },
+          onComplete: () => {
+            // Timeout: Auto-submit incorrect guess
+            if (this.#isGuessingActive) {
+              this.#handleUserGuess(!this.#engine.getCurrentRound().isAI); // Force wrong guess
+            }
+          }
+        });
+
+        // Heartbeat tick audio when urgency increases
+        let lastBeat = 0;
+        this.#heartbeatInterval = setInterval(() => {
+          if (this.#remainingSeconds <= 4.0 && this.#remainingSeconds > 0) {
+            const urgency = 1.0 + (4.0 - this.#remainingSeconds) * 0.4;
+            this.#audio.playHeartbeat(urgency);
+          }
+        }, 1000);
+      }
+
+      #stopTimer() {
+        if (this.#timerTween) {
+          this.#timerTween.kill();
+          this.#timerTween = null;
+        }
+        if (this.#heartbeatInterval) {
+          clearInterval(this.#heartbeatInterval);
+          this.#heartbeatInterval = null;
+        }
+      }
+
+      #handleUserGuess(guessIsAI) {
+        if (!this.#isGuessingActive) return;
+        this.#isGuessingActive = false;
+        this.#stopTimer();
+
+        // Submit guess to engine
+        const result = this.#engine.submitGuess(guessIsAI, this.#remainingSeconds);
+        const round = this.#engine.getCurrentRound();
+
+        // Play feedback audio
+        if (result.isCorrect) {
+          this.#audio.playSuccessChime(result.multiplier);
+        } else {
+          this.#audio.playErrorBuzzer();
+        }
+
+        // Update Top Bar Telemetry
+        this.#animateScoreCounter(this.#engine.score);
+        this.#updateStreakDisplay(this.#engine.streak, result.multiplier);
+
+        // Populate Back Face
+        this.#populateBackFace(result, round);
+
+        // Execute GSAP 3D Card Flip (180deg)
+        this.#isFlipped = true;
+        gsap.to(this.#dom.flipCardInner, {
+          rotateY: 180,
+          duration: 0.65,
+          ease: 'back.out(1.4)',
+          transformPerspective: 1200
+        });
+      }
+
+      #populateBackFace(result, round) {
+        // Verdict Banner
+        if (result.isCorrect) {
+          this.#dom.verdictBanner.className = 'rounded-xl p-4 mb-5 border transition-all flex items-center justify-between bg-emerald-950/40 border-emerald-500/40';
+          this.#dom.verdictIconWrap.className = 'w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
+          this.#dom.verdictIconWrap.innerHTML = '<i data-lucide="check" class="w-6 h-6"></i>';
+          this.#dom.verdictTitle.textContent = 'SPOT ON! EXCELLENT INSTINCTS';
+          this.#dom.verdictSubtitle.textContent = `+${result.roundScore} pts (Time bonus: +${result.timeBonus} pts • ${result.multiplier}x Multiplier)`;
+        } else {
+          this.#dom.verdictBanner.className = 'rounded-xl p-4 mb-5 border transition-all flex items-center justify-between bg-rose-950/40 border-rose-500/40';
+          this.#dom.verdictIconWrap.className = 'w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg bg-rose-500/20 text-rose-400 border border-rose-500/40';
+          this.#dom.verdictIconWrap.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
+          this.#dom.verdictTitle.textContent = 'DUPED BY THE MATRIX!';
+          this.#dom.verdictSubtitle.textContent = `+0 pts • Streak reset to 1.0x`;
+        }
+
+        // Identity Badge
+        if (round.isAI) {
+          this.#dom.identityPill.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center gap-1.5';
+          this.#dom.identityPill.innerHTML = '<i data-lucide="bot" class="w-3.5 h-3.5"></i> SYNTHETIC AI SLOP';
+        } else {
+          this.#dom.identityPill.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5';
+          this.#dom.identityPill.innerHTML = '<i data-lucide="user-check" class="w-3.5 h-3.5"></i> AUTHENTIC HUMAN';
+        }
+
+        // Render Tokenized Highlights
+        let tokenHtml = '';
+        round.tokens.forEach(tok => {
+          if (tok.type === 'human') {
+            tokenHtml += `<span data-token="human" class="token-emerald bg-emerald-500/20 text-emerald-300 border-b-2 border-emerald-400 px-1.5 py-0.5 rounded font-medium">${tok.text}</span> `;
+          } else if (tok.type === 'ai') {
+            tokenHtml += `<span data-token="ai" class="token-crimson bg-rose-500/20 text-rose-300 border-b-2 border-rose-400 px-1.5 py-0.5 rounded font-medium">${tok.text}</span> `;
+          } else {
+            tokenHtml += `<span data-token="neutral">${tok.text}</span> `;
+          }
+        });
+        this.#dom.tokenizedSpecimenBox.innerHTML = tokenHtml.trim();
+
+        // Forensic Explanation
+        this.#dom.forensicExplanationText.textContent = round.explanation;
+
+        if (window.lucide) lucide.createIcons();
+      }
+
+      #advanceToNext() {
+        const hasMore = this.#engine.advanceNextRound();
+        if (hasMore && (this.#engine.mode === 'arcade' || this.#engine.currentIndex < 5)) {
+          this.#loadCurrentRound();
+        } else {
+          this.#showScorecardModal();
+        }
+      }
+
+      #animateScoreCounter(targetScore) {
+        const currentScore = parseInt(this.#dom.headerScore.textContent, 10) || 0;
+        const scoreObj = { val: currentScore };
+        gsap.to(scoreObj, {
+          val: targetScore,
+          duration: 0.6,
+          ease: 'power2.out',
+          onUpdate: () => {
+            this.#dom.headerScore.textContent = Math.round(scoreObj.val);
+          }
+        });
+      }
+
+      #updateStreakDisplay(streak, multiplier) {
+        this.#dom.headerStreakMultiplier.textContent = `${multiplier.toFixed(1)}x`;
+        if (streak >= 5) {
+          this.#dom.headerStreakIcon.textContent = '⚡';
+          this.#dom.headerStreakMultiplier.className = 'text-xs font-bold text-rose-400 animate-pulse';
+        } else if (streak >= 3) {
+          this.#dom.headerStreakIcon.textContent = '🔥';
+          this.#dom.headerStreakMultiplier.className = 'text-xs font-bold text-amber-300';
+        } else {
+          this.#dom.headerStreakIcon.textContent = '✨';
+          this.#dom.headerStreakMultiplier.className = 'text-xs font-bold text-slate-300';
+        }
+      }
+
+      #updateRoundDots(currentIndex) {
+        const dots = Array.from(this.#dom.roundDotsContainer.children);
+        const history = this.#engine.history;
+
+        dots.forEach((dot, idx) => {
+          if (idx < history.length) {
+            const h = history[idx];
+            if (h.isCorrect) {
+              dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-500/50';
+            } else {
+              dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-rose-500/50';
+            }
+          } else if (idx === currentIndex) {
+            dot.className = 'w-2.5 h-2.5 rounded-full bg-purple-500 ring-2 ring-purple-400/50 animate-pulse';
+          } else {
+            dot.className = 'w-2.5 h-2.5 rounded-full bg-slate-800 border border-white/10';
+          }
+        });
+      }
+
+      #showScorecardModal() {
+        const summary = this.#engine.getSummary();
+        this.#audio.playScoreReveal();
+
+        // Populate Modal Fields
+        this.#dom.modalModeDate.textContent = summary.mode === 'daily' 
+          ? `DAILY CHALLENGE #${summary.dailySeedKey}` 
+          : `ENDLESS ARCADE RUN (${summary.totalRounds} ROUNDS)`;
+
+        this.#dom.modalTotalScore.textContent = `${summary.score.toLocaleString()} PTS`;
+        this.#dom.modalRankBadge.innerHTML = `<span>${summary.rankTitle} (Turing IQ: ${summary.turingIQ})</span>`;
+        this.#dom.modalAccuracyCount.textContent = `${summary.correctCount} / ${summary.totalRounds} Correct (${summary.accuracyPct}%)`;
+        this.#dom.modalMaxStreak.textContent = `🔥 ${summary.maxStreak} in a Row`;
+        this.#dom.modalAvgTime.textContent = `${summary.avgReactionTime}s`;
+
+        // Render Emoji Grid
+        const emojis = summary.emojiRow.split(' ');
+        this.#dom.modalEmojiGrid.innerHTML = emojis.map(e => `<span>${e}</span>`).join(' ');
+
+        // Fire Celebratory Confetti
+        if (summary.accuracyPct >= 60 && typeof confetti === 'function') {
+          confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+
+        // Show Modal with GSAP
+        this.#dom.scorecardModal.classList.remove('pointer-events-none');
+        gsap.to(this.#dom.scorecardModal, { opacity: 1, duration: 0.3 });
+        gsap.to(this.#dom.scorecardCard, { scale: 1, duration: 0.4, ease: 'back.out(1.4)' });
+      }
+
+      #hideScorecardModal() {
+        gsap.to(this.#dom.scorecardModal, {
+          opacity: 0,
+          duration: 0.2,
+          onComplete: () => {
+            this.#dom.scorecardModal.classList.add('pointer-events-none');
+            gsap.set(this.#dom.scorecardCard, { scale: 0.95 });
+          }
+        });
+      }
+
+      async #copyScorecardToClipboard() {
+        const summary = this.#engine.getSummary();
+        const shareText = [
+          `🤖 Human or Slop? ${summary.mode === 'daily' ? `Daily #${summary.dailySeedKey}` : 'Arcade Mode'}`,
+          `Turing Score: ${summary.score.toLocaleString()} pts | Rank: ${summary.rankTitle} (IQ: ${summary.turingIQ})`,
+          `${summary.emojiRow} (${summary.correctCount}/${summary.totalRounds} - ${summary.accuracyPct}%)`,
+          `🔥 Max Streak: ${summary.maxStreak} • Avg Time: ${summary.avgReactionTime}s`,
+          ``,
+          `Can you spot the AI slop?`,
+          `👉 https://viral-suite.vercel.app/slop`
+        ].join('\n');
+
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(shareText);
+          } else {
+            const ta = document.createElement('textarea');
+            ta.value = shareText;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+          }
+
+          // Audio & Confetti
+          this.#audio.playSuccessChime(1.5);
+          if (typeof confetti === 'function') {
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+          }
+
+          // Show Toast Notification
+          this.#showToast();
+        } catch (err) {
+          console.error('Failed to copy to clipboard', err);
+        }
+      }
+
+      #showToast() {
+        const toast = this.#dom.toastNotification;
+        gsap.killTweensOf(toast);
+        gsap.fromTo(toast,
+          { y: -100, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.4, ease: 'back.out(1.4)' }
+        );
+
+        setTimeout(() => {
+          gsap.to(toast, {
+            y: -100,
+            opacity: 0,
+            duration: 0.3,
+            ease: 'power2.in'
+          });
+        }, 3000);
+      }
+    }
+
+    // ==========================================
+    // 8. BOOTSTRAP APPLICATION
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', () => {
+      // Initialize Lucide icons
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // Initialize Main Controller
+      window.__TURING_APP__ = new TuringUIController();
+    });
+  </script>
+</body>
+</html>
